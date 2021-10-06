@@ -35,8 +35,8 @@ qual <- climbing_sim(nsim = 10000, nplay = 20)
 final <- climbing_sim(nsim = 10000, nplay = 8)
 
 # Question: Given that a climber wins any event, what's the probability...
-# 1) of advancing to the final for a qualifier
-# 2) of winning a medal for a finalist
+# 1) of advancing to the final for a qualifier?
+# 2) of winning a medal for a finalist?
 
 # qualification distribution
 qual_dist <- qual %>%
@@ -78,8 +78,7 @@ qual_dist %>%
     legend.key.size = unit(0.4, "cm")
   )
 
-
-# Question: What's the expected score for each rank of both qualification and final
+# Question: What's the expected score for each rank in both qualification and final?
 
 # get expected final scores
 # also create color code for gold, silver, bronze
