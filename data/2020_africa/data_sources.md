@@ -1,0 +1,1 @@
+https://www.ifsc-climbing.org/index.php/component/ifsc/?view=event&WetId=1168

@@ -1,0 +1,9 @@
+f_rank,name,from,bib,f_speed,f_bould,f_lead,f_total,q_speed,q_bould,q_lead,q_total,q_rank
+1,O'HALLORAN Tom,AUS,20,2,2,2,8,3,1,2,6,1
+2,ABEL Ben,AUS,15,3,1,5,15,2,5,7,70,4
+3,KASSAY James,AUS,16,6,3,1,18,6,4,1,24,3
+4,FARRELL Thomas,AUS,18,1,6,3,18,1,2,3,6,2
+5,MIDDLEHURST Ned,AUS,14,4,5,4,80,5,7,6,210,7
+6,GATLAND Chase,NZL,19,5,4,6,120,4,6,8,192,6
+7,HORNSHAW Hugo,AUS,12,8,7,7,392,7,8,4,224,8
+8,HARRISON Campbell,AUS,21,7,,,,8,3,5,120,5
