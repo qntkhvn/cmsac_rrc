@@ -12,10 +12,10 @@ abstract: "Sport climbing, which made its Olympic debut at the 2020 Summer Games
 header-includes:
  \usepackage{setspace}
  \setlength{\parskip}{2mm}
- \setstretch{1.1}
+ \setstretch{1.11}
  \usepackage{float}
  \floatplacement{figure}{H}
- \usepackage[skip=3pt]{caption}
+ \usepackage[skip=4pt]{caption}
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
@@ -56,9 +56,9 @@ In this paper, we perform statistical analysis to investigate the limitations of
 
 # Simulation Study
 
-In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. For each round, we performed 10000 simulations, and this was accomplished by randomly assigning the ranks of each event to every participant, with the assumption that the ranks are uniformly distributed. After the completion of the simulations, we calculated the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions. 
+In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. For each round, we execute 10000 simulations, and this was accomplished by randomly assigning the ranks of each event to every participant, with the assumption that the ranks are uniformly distributed. After that, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions. 
 
-We are interested in the following questions:
+We are particularly interested in the following questions:
 
 \vspace{-4mm}
 
@@ -141,7 +141,7 @@ final_dist %>%
 
 \vspace{-4mm}
 
-```{r, fig.cap="The average scores for the top 10 qualification ranks and all 8 final ranks, obtained from simulations.", fig.height=3, fig.width=6.4}
+```{r, fig.cap="The average scores for the top 10 qualification ranks and all 8 final ranks, obtained from simulations.", fig.height=3, fig.width=6.2}
 final %>% 
   group_by(rank) %>% 
   summarize(avg_score = mean(score)) %>%
@@ -179,7 +179,7 @@ Figure 3 is a multi-panel matrix of scatterplots of the ranks of the individual 
 
 It is evidently clear that there exists a fairly strong and positive association between the final rank and the ranks of both bouldering ($\tau = 0.432$, $p$-value $=0.00735$, Bootstrapped $95\%$ CI: (0.107, 0.691)) and lead climbing ($\tau = 0.463$, $p$-value $=0.00378$, Bootstrapped $95\%$ CI: (0.112, 0.753)). This implies that climbers with high placements in both bouldering and lead also tend to finish at a higher ranking spot overall.
 
-On the other hand, the correlation with the final rank is not as strong for speed climbing as the other two events ($\tau = 0.147$), and there is insufficient evidence for an association between the rank of speed climbing and the overall rank ($p$-value $=0.386$, Bootstrapped $95\%$ CI: (-0.191, 0.469)). Thus, this offers evidence that speed climbers are at a disadvantage in this combined format, compared to those with expertise in the other two concentrations. This validates the concerns of climbers from the interviews mentioned in Section 1.1. 
+On the other hand, the correlation with the final rank is not as strong for speed climbing as the other two events ($\tau = 0.147$), and there is insufficient evidence for an association between the rank of speed climbing and the overall rank ($p$-value $=0.386$, Bootstrapped $95\%$ CI: (-0.191, 0.469)). Thus, this offers evidence that speed climbers are at a disadvantage under this three-discipline combined format, compared to those with expertise in the other two concentrations. This validates the concerns of climbers from the interviews mentioned in Section 1.1. 
 
 ```{r, fig.height=3, fig.width=6.5, fig.cap= "Scatterplots of overall rank and speed, bouldering, and lead ranks for Women's Qualification at Tokyo 2020."}
 wq <- read_csv("https://raw.githubusercontent.com/qntkhvn/climbing/main/data/2020_olympics/wq.csv")
@@ -193,7 +193,7 @@ wq %>%
   mutate(Discipline = factor(Discipline, levels = c("Speed", "Bouldering", "Lead"))) %>% 
   ggplot(aes(Rank, Overall)) +
   geom_point() +
-  geom_smooth(span = 1, color = "darkblue") +
+  geom_smooth(span = 1, color = "darkblue", alpha = 0.2) +
   facet_wrap(~ Discipline) +
   theme(panel.grid.major.x = element_blank())
 ```
@@ -226,7 +226,7 @@ tribble(
 
 In addition, we perform principal component analysis (PCA) to summarize the correlations among a set of observed performance variables associated with the three climbing disciplines. In particular, using the data from the Women's Qualification round at Tokyo 2020, we look at the racing time (in seconds) for speed; the number of successfully completed boulders ("tops"); and the number of holds reached for lead.
 
-Figure 4 is a PCA biplot showing the PC scores of the climbers and loadings of the skill variables. We notice that the lead and bouldering performances strongly influence PC1, while speed time is the only variable contributing to PC2, separated from the other two skills. Moreover, since these two PC1 vectors are close and form a small angle, the two variables they represent (bouldering tops and lead holds reached) are positively correlated. This implies that a climber that does well in bouldering is also very likely to deliver a good performance in lead climbing.
+Figure 4 is a PCA biplot showing the PC scores of the climbers and loadings of the skill variables. We notice that the lead and bouldering performances strongly influence PC1, while speed time is the only variable contributing to PC2, separated from the other two skills. Moreover, since the two PC1 vectors are close and form a small angle, the two variables they represent (bouldering tops and lead holds reached) are positively correlated. This implies that a climber that does well in bouldering is also very likely to deliver a good performance in lead climbing.
 
 ```{r, out.width = "82%", fig.cap= "PCA Biplot for Women's Qualification at Tokyo 2020", fig.align="center"}
 knitr::include_graphics("pca.png")
@@ -234,7 +234,7 @@ knitr::include_graphics("pca.png")
 
 ## Leave-one-climber-out Analysis
 
-Another interesting question that we are interested in investigating is "What would happen to the rankings if a single climber is removed?". There is a connection between this situation and the idea of independence of irrelevant alternatives (IIA). The IIA criterion is a property of a voting system which states that after a winner is determined, if one of the losing candidates drops out and the votes are recounted, there should not be a change in the winner. First mentioned by @arrow1951, the IIA condition is also known as Luce's choice axiom [@luce1959] in probability theory, and it has had a number of applications in the fields of decision theory, economics, and psychology over the years. We notice a link between the concept of IIA and the topic of ranking system in sports. As an illustration, suppose we have 3 players A, B, and C participating in a competition. If A finishes in the first place and C is later disqualified and removed, A should still win. If the original winner (A) loses the modified competition (with C removed), then the Independence of Irrelevant Alternatives has been violated. For our particular case, this sort of analysis can be helpful in examining the overall outcome for a climbing contest, specifically how a disqualification can affect the standings of medalists in the final round.
+Another question that we are interested in investigating is "What would happen to the rankings if a single climber is removed?". There is a connection between this situation and the idea of independence of irrelevant alternatives (IIA). The IIA criterion is a property of a voting system which states that after a winner is determined, if one of the losing candidates drops out and the votes are recounted, there should not be a change in the winner. First mentioned by @arrow1951, the IIA condition is also known as Luce's choice axiom [@luce1959] in probability theory, and it has had a number of applications in the fields of decision theory, economics, and psychology over the years. We notice a link between the concept of IIA and the topic of ranking system in sports. As an illustration, suppose we have 3 players A, B, and C participating in a competition. If A finishes in the first place and C is later disqualified and removed, A should still win. If the original winner (A) loses the modified competition (with C removed), then the Independence of Irrelevant Alternatives has been violated. For our particular case, this sort of analysis can be helpful in examining the overall outcome for a climbing contest, specifically how a disqualification can affect the standings of medalists in the final round.
 
 In the analysis that follows, we use data from the 2018 Youth Olympics Women's Final [@2018youth]. This event also implemented the combined format and rank-product scoring system, but only consisted of 6 climbers competing in the final, rather than 8 as Tokyo 2020. We modify the data as follows. After an athlete is dropped (by their rank), the new ranks for each discipline of the remaining players are re-calculated. The new final scores can then be obtained by multiplying the three event ranks, which then determines the new overall ranks.
 
