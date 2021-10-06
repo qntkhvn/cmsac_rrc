@@ -1,7 +1,7 @@
 # Leave-one-climber-out Analysis
 
 # 2018 Youth Olympics women's final data
-wf <- read_csv("https://raw.githubusercontent.com/qntkhvn/climbing/main/data/2018_youth_olympics/women_final.csv")
+wf <- read_csv("https://raw.githubusercontent.com/qntkhvn/cmsac_rrc/main/data/2018_youth_olympics/women_final.csv")
 
 # function to drop and re-rank the climbers
 drop_rerank <- function(df) {

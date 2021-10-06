@@ -1,7 +1,7 @@
 # Rank correlation analysis
 
 # Tokyo 2020 women's qualification data
-wq <- read_csv("https://raw.githubusercontent.com/qntkhvn/climbing/main/data/2020_olympics/wq.csv")
+wq <- read_csv("https://raw.githubusercontent.com/qntkhvn/cmsac_rrc/main/data/2020_olympics/wq.csv")
 
 # scatterplots of overall rank vs ranks of speed, bouldering, lead
 wq %>% 
