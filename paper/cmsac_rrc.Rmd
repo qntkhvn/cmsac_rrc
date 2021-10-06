@@ -221,7 +221,7 @@ tribble(
   "Bouldering", 0.432, 136, "0.00735", "(0.107, 0.691)",
   "Lead", 0.463, 139, "0.00378", "(0.112, 0.753)"
 ) %>% 
-  knitr::kable(caption = "Kendall's tau values, alongside correlation test statistics, p-values, and bootstrapped 95% confidence intervals, for the overall rank and the rank of speed, bouldering, and lead disciplines of Women's Qualification at Tokyo 2020.")
+  knitr::kable(caption = "Kendall's tau values, along with correlation test statistics, p-values, and bootstrapped 95% confidence intervals, for the overall rank and the rank of speed, bouldering, and lead disciplines of Women's Qualification at Tokyo 2020.")
 ```
 
 In addition, we perform principal component analysis (PCA) to summarize the correlations among a set of observed performance variables associated with the three climbing disciplines. In particular, using the data from the Women's Qualification round at Tokyo 2020, we look at the racing time (in seconds) for speed; the number of successfully completed boulders ("tops"); and the number of holds reached for lead.
