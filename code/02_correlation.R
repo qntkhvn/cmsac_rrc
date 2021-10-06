@@ -58,7 +58,7 @@ wq_cleaned <- wq %>%
 
 # PCA fit
 wq_pca <- wq_cleaned %>%
-  select(climber, speed_time, bould_tops, lead_holds) %>%
+  dplyr::select(climber, speed_time, bould_tops, lead_holds) %>%
   mutate(climber = str_remove(climber, ".*\\s")) %>% 
   column_to_rownames(var = "climber") %>% 
   prcomp(scale = TRUE)
