@@ -65,7 +65,9 @@ This type of scoring system heavily rewards high finishes and relatively ignores
 They show that in the finals of the men's competition that if rank sum was used instead of rank product, Narasaki would have won the gold medal.  However, with rank product, he finished fourth.  Interestingly, in the women's competition rank product and rank sum yield the same set of medal winners in the same order. 
 - This paper proposes a new scoring system.  The scoring system they propose is the sum of the sqaure roots of the ranks.  I think an interesting question is how do you determine $f$ the exponent in the scoring system.    
 
-Rank Product in biology/genes
+@Breitling2004 Rank Product in biology/genes
+
+@Demirtas2019 Paper describing the algorithm to indice the correlation that we want.  
 
 
 To the best of our knowledge, we know of no sporting event, team or individual, that uses the product of ranks to determine an overall rankings.  There are examples of team sports that use the rank-sum scoring to determine the winning team such as cross country, where the squad with the lowest sum of ranks of the top five runners is awarded with a first place finish. However, @hammond2007 and @boudreau2018 pointed out several problems with rank-sum scoring in cross country, including violations of social choice principles. In addition, some individual sports such as the decathlon and heptathlon rely on a sum of scores from the ten or seven events, however, these scores are not determined based on the ranks of the competitors. That is, a decathlete's score is entirely based upon their times, distances, and heights, and their overall score will be exactly the same if the times, distances, and heights remain the same regardless of the performance of other individuals [@westera2006]. Furthermore, there are other individual competitions consisted of several events combined that do base their scoring on ranks, such as crossfit competitions.  In each event, points are earned based on the competitor's rank in the event based on a scoring table, and a competitors final score is based on the sum of their scores across all the events [@crossfit2021].
