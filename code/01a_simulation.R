@@ -49,39 +49,41 @@ climbing_sim_cor <- function(nsim = 10000, nplay, rho = 0) {
 
 # simulate qualification and final rounds
 set.seed(1)
-cor_vec <- seq(0,1,length = 5)
+cor_vec <- seq(0, 1, length = 5)
 
-for (rrr in 1:length(cor_vec)){print(rrr)
-qual <- climbing_sim_cor(nsim = 10000, nplay = 20, rho = cor_vec[rrr])
-final <- climbing_sim_cor(nsim = 10000, nplay = 8, rho = cor_vec[rrr])
-
-#correlation on the x axis vs advancement probability?  
-#correlation on the x axis vs medal probability in the finals?    
-
-# qualification distribution
-qual_dist <- qual %>%
-  filter(e1 == 1 | e2 == 1 | e3 == 1) %>%
-  count(rank) %>%
-  mutate(Probability = n / sum(n),
-         Cumulative = cumsum(Probability)) %>%
-  select(-n) %>%
-  pivot_longer(!rank, names_to = "type") %>%
-  mutate(round = "Qualification", rho = cor_vec[rrr])
-
-qual_dist_list[[rrr]] <- qual_dist
-
-# final distribution
-final_dist <- final %>%
-  filter(e1 == 1 | e2 == 1 | e3 == 1) %>%
-  count(rank) %>%
-  mutate(Probability = n / sum(n),
-         Cumulative = cumsum(Probability)) %>%
-  select(-n) %>%
-  pivot_longer(!rank, names_to = "type") %>%
-  mutate(round = "Final", rho = cor_vec[rrr])
-
-
-final_dist_list[[rrr]] <- final_dist
+for (rrr in 1:length(cor_vec)){
+  
+  print(rrr)
+  qual <- climbing_sim_cor(nsim = 10000, nplay = 20, rho = cor_vec[rrr])
+  final <- climbing_sim_cor(nsim = 10000, nplay = 8, rho = cor_vec[rrr])
+  
+  #correlation on the x axis vs advancement probability?  
+  #correlation on the x axis vs medal probability in the finals?    
+  
+  # qualification distribution
+  qual_dist <- qual %>%
+    filter(e1 == 1 | e2 == 1 | e3 == 1) %>%
+    count(rank) %>%
+    mutate(Probability = n / sum(n),
+           Cumulative = cumsum(Probability)) %>%
+    select(-n) %>%
+    pivot_longer(!rank, names_to = "type") %>%
+    mutate(round = "Qualification", rho = cor_vec[rrr])
+  
+  qual_dist_list[[rrr]] <- qual_dist
+  
+  # final distribution
+  final_dist <- final %>%
+    filter(e1 == 1 | e2 == 1 | e3 == 1) %>%
+    count(rank) %>%
+    mutate(Probability = n / sum(n),
+           Cumulative = cumsum(Probability)) %>%
+    select(-n) %>%
+    pivot_longer(!rank, names_to = "type") %>%
+    mutate(round = "Final", rho = cor_vec[rrr])
+  
+  
+  final_dist_list[[rrr]] <- final_dist
 }
 
 
