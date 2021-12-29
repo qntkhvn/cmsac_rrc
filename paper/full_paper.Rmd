@@ -16,7 +16,8 @@ header-includes:
  \usepackage{setspace}
  \setlength{\parskip}{1mm}
  \usepackage{float}
- \usepackage[skip=2pt]{caption}
+ \floatplacement{figure}{H}
+ \usepackage[skip=5pt]{caption}
  \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
 bibliography: ref.bib
 csl: ref_style.csl
@@ -34,7 +35,7 @@ fontsize: 12pt
 knitr::opts_chunk$set(message = FALSE,
                       echo = FALSE,
                       warning = FALSE,
-                      fig.pos = "h")
+                      fig.pos = "H")
 ```
 
 \newpage
@@ -81,19 +82,27 @@ In this paper, we perform statistical analysis to investigate the limitations of
 
 # Simulation Study
 
-@Demirtas2019 Paper describing the algorithm to induce the correlation that we want.  
+@Demirtas2019 Paper describing the algorithm to induce the correlation that we want.
+
+
+In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds.
+
+Given that 
+
+
+
+
+
+
+
 
 In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. For each round, we execute 10000 simulations, and this was accomplished by randomly assigning the ranks of each event to every participant, with the assumption that the ranks are uniformly distributed. After that, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions. 
 
 We are particularly interested in the following questions:
 
-\vspace{-4mm}
-
 *   For a qualifier, what is the probability that they advance to the final round (i.e. finish in the top 8 of qualification), given that they win any discipline?
 
 *   For a finalist, what is the probability that they win a medal (i.e. finish in the top 3 of the finals), given that they win any discipline?
-
-\vspace{-4mm}
 
 Our simulation results, as illustrated by Figure 1, show that a climber is almost guaranteed to finish in the top 8 of qualification and advance to the final round if they win at least one of the three climbing concentrations (99.48% chance). Regarding the finals, a climber is also very likely to claim a top 3 finish and bring home a medal if they win any event (85.01% chance). Moreover, we notice that if a climber wins any discipline, they are also more likely to finish first overall than any other positions in the eventual qualification and final rankings. This shows how significant winning a discipline is to the overall competition outcome for any given climber. 
 
