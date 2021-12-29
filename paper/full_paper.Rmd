@@ -17,7 +17,9 @@ header-includes:
  \setlength{\parskip}{1mm}
  \usepackage{float}
  \floatplacement{figure}{H}
- \usepackage[skip=5pt]{caption}
+ \usepackage{caption}
+ \captionsetup[figure]{font=small}
+ \captionsetup[table]{font=small}
  \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
 bibliography: ref.bib
 csl: ref_style.csl
@@ -82,19 +84,20 @@ In this paper, we perform statistical analysis to investigate the limitations of
 
 # Simulation Study
 
+Sim study
+- write again
+- describe, mention the sim corr paper
+- figures:
+  + prob of finishing 1st goes up
+  + pick a corr (0.5?) and display the graphs
+    (distributions of rank and score) like before
+
 @Demirtas2019 Paper describing the algorithm to induce the correlation that we want.
 
 
 In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds.
 
 Given that 
-
-
-
-
-
-
-
 
 In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. For each round, we execute 10000 simulations, and this was accomplished by randomly assigning the ranks of each event to every participant, with the assumption that the ranks are uniformly distributed. After that, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions. 
 
@@ -170,8 +173,6 @@ final_dist %>%
         legend.margin = margin(-5),
         legend.key.size = unit(0.4, "cm"))
 ```
-
-\vspace{-4mm}
 
 ```{r, fig.cap="The average scores for the top 10 qualification ranks and all 8 final ranks, obtained from simulations.", fig.height=3, fig.width=6.2}
 final %>% 
@@ -270,7 +271,6 @@ In the analysis that follows, we use data from the 2018 Youth Olympics Women's F
 Figure 5 shows the modified versions of the rankings after each ranked climber is excluded for the Women's Final at the 2018 Youth Olympics. We have clear evidence from this plot that removing a single climber changes the rankings drastically, especially in terms of the order of medalists. One particular interesting case is where an athlete's position changes when someone who originally finished behind them drops out. This situation is illustrated by panel 5 of the women's competition, where the fifth-place climber, Krasovskaia, was excluded; and Meul, whose actual final rank was fourth, moved up to the second spot and would have claimed the silver medal. Furthermore, this clearly demonstrates that the rank-product scoring method of Olympics sport climbing violates the IIA criterion. 
 
 <!-- This reveals another issue of the sport climbing scoring system, which is that there is a dependency on irrelevant parties. -->
-
 
 ```{r, fig.height=3.6, fig.width=6.5, fig.cap="This figure illustrates the changes to the 2018 Youth Olympics Women's Final rankings when each climber is left out. Each panel represents the rank of the drop-out athlete, with 0 being the original final results. Each case with a change in rank orderings is highlighted by a black panel border, and any player with a rank change is represented by a red-filled bar"}
 wf <- read_csv("https://raw.githubusercontent.com/qntkhvn/climbing/main/data/2018_youth_olympics/women_final.csv")
