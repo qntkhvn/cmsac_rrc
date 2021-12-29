@@ -1,12 +1,5 @@
 ---
-title: |
-  | An Examination of Sport Climbing's 
-  | Competition Format and Scoring System
-author:
-  - Quang Nguyen^[Loyola University Chicago. Corresponding author, nnguyen22@luc.edu.]
-  - Hannah Butler^[Colorado State University]
-  - Gregory J. Matthews^[Loyola University Chicago]
-date: \today
+title: An Examination of Sport Climbing's Competition Format and Scoring System
 output: 
   pdf_document: 
     number_sections: yes
@@ -14,17 +7,24 @@ output:
     keep_tex: no
 abstract: Sport climbing, which made its Olympic debut at the 2020 Summer Games, generally consists of three separate disciplines\text{:} speed climbing, bouldering, and lead climbing. However, the International Olympic Committee (IOC) only allowed one set of medals per gender for sport climbing. As a result, the governing body of sport climbing, rather than choosing only one of the three disciplines to include in the Olympics, decided to create a competition combining all three disciplines. In order to determine a winner, a combined scoring system was created using the product of the ranks across the three disciplines to determine an overall score for each climber. In this work, the rank-product scoring system of sport climbing is evaluated through simulation to investigate its general features, specifically, the advancement probabilities and scores for climbers given certain placements. Additionally, analyses of historical climbing contest results are presented and real examples of violations of the independence of irrelevant alternatives are illustrated. Finally, this work finds evidence that the current competition format is putting speed climbers at a disadvantage.
 header-includes:
- \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
+ \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{1mm} \\
+  \small \textsuperscript{1}Department of Mathematics and Statistics, Loyola University Chicago, \\
+  \small Chicago, IL 60660 \\
+  \small \textsuperscript{2}Department of Statistics, Colorado State University, \\
+  \small Fort Collins, CO 80523}
+ \date{\today}
  \usepackage{setspace}
  \setlength{\parskip}{1mm}
  \usepackage{float}
  \usepackage[skip=2pt]{caption}
+ \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
 geometry: margin=1.5in
 fontsize: 12pt
 ---
+\vspace{-3mm}
 ```{=latex}
 \keywords{word1, word2, word3}
 ```
@@ -45,7 +45,7 @@ knitr::opts_chunk$set(message = FALSE,
 
 The 2020 Summer Olympics in Tokyo, Japan marked the first appearance of sport climbing on the Olympic stage. This sport is broken down into three disciplines: speed climbing, bouldering, and lead climbing. However, since only one set of Olympic medals is awarded to each gender event of sport climbing at Tokyo 2020, all three disciplines were included together, forming one single combined event. Under this "triathlon" format, every climber must compete in all three concentrations, and their individual score is determined as the product of the ranks across the three disciplines, with the lowest rank product declared the winner.
 
-The first discipline, speed climbing, takes place on a standardized 15 meters tall wall where competitors try to reach the top of the wall as fast as possible. At Tokyo 2020, speed climbing is being contested in a head-to-head format and under a single elimination bracket tournament structure.  Next, in bouldering, contestants attempt to solve boulder problems, as they have a fixed amount of time to climb 4.5 meters high walls. The goal for this event is to complete as many courses in the fewest attempts as possible. Ties are further broken by the number of "zone holds", which are holds approximately half way through each course.  Finally, in lead climbing, each athlete is given six minutes and one attempt only to climb as high as they can on a wall of height 15 meters. A climber gets one point for each hold that they reach, and the participant that manages to reach the highest point on the wall wins the lead discipline. 
+The first discipline, speed climbing, takes place on a standardized 15 meters tall wall where competitors try to reach the top of the wall as fast as possible. At Tokyo 2020, speed climbing is being contested in a head-to-head format and under a single elimination bracket tournament structure.  Next, in bouldering, contestants attempt to solve boulder problems, as they have a fixed amount of time to climb 4.5 meters high walls. The goal for this event is to complete as many courses in the fewest attempts as possible. Ties are further broken by the number of ``zone holds", which are holds approximately half way through each course.  Finally, in lead climbing, each athlete is given six minutes and one attempt only to climb as high as they can on a wall of height 15 meters. A climber gets one point for each hold that they reach, and the participant that manages to reach the highest point on the wall wins the lead discipline. 
 
 The decision to combine the three climbing events and only award one set of medals for both men's and women's events in the Olympics has received a large amount of criticism from climbing athletes all over the world. In a series of interviews conducted by Climbing Magazine in 2016 [@blanchard2016], a number of climbers shared their thoughts and concerns about the new Olympics climbing format. Legendary climber Lynn Hill compared the idea of combining speed climbing, bouldering, and lead climbing to "asking a middle distance runner to compete in the sprint". She then added "Speed climbing is a sport within our sport". Other climbers also hold the same opinion as Hill regarding speed climbing, using words and phrases like "bogus", "a bummer", "less than ideal", "not in support", and "cheesy and unfair" to describe the new combined competition format. Courtney Woods stated "Speed climbers will have the biggest disadvantage because their realm isn’t based on difficult movements". Mike Doyle believed "Honestly, the people that will suffer the most are the ones that focus only on speed climbing. Those skills/abilities don’t transfer as well to the other disciplines". The climbers also expressed their hope for a change in the competition format in future climbing tournaments.
 
