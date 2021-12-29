@@ -7,12 +7,12 @@ output:
     keep_tex: no
 abstract: Sport climbing, which made its Olympic debut at the 2020 Summer Games, generally consists of three separate disciplines\text{:} speed climbing, bouldering, and lead climbing. However, the International Olympic Committee (IOC) only allowed one set of medals per gender for sport climbing. As a result, the governing body of sport climbing, rather than choosing only one of the three disciplines to include in the Olympics, decided to create a competition combining all three disciplines. In order to determine a winner, a combined scoring system was created using the product of the ranks across the three disciplines to determine an overall score for each climber. In this work, the rank-product scoring system of sport climbing is evaluated through simulation to investigate its general features, specifically, the advancement probabilities and scores for climbers given certain placements. Additionally, analyses of historical climbing contest results are presented and real examples of violations of the independence of irrelevant alternatives are illustrated. Finally, this work finds evidence that the current competition format is putting speed climbers at a disadvantage.
 header-includes:
- \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{1mm} \\
+ \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{2mm} \\
   \small \textsuperscript{1}Department of Mathematics and Statistics, Loyola University Chicago, \\
   \small Chicago, IL 60660 \\
   \small \textsuperscript{2}Department of Statistics, Colorado State University, \\
   \small Fort Collins, CO 80523}
- \date{\today}
+ \date{\today \vspace{-8mm}}
  \usepackage{setspace}
  \setlength{\parskip}{1mm}
  \usepackage{float}
