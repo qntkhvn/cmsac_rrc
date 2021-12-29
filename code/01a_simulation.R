@@ -87,8 +87,8 @@ for (rrr in 1:length(cor_vec)){
 }
 
 
-final_dist_stack <- do.call(rbind,final_dist_list)
-ggplot(aes(x = rho, y = value, colour = factor(rank)), data = subset(final_dist_stack,type == "Probability")) + geom_line()
+final_dist_stack <- bind_rows(final_dist_list)
+ggplot(aes(x = rho, y = value, color = factor(rank)), data = subset(final_dist_stack,type == "Probability")) + geom_line()
 
 # plot distributions, faceted by round
 qual_dist %>%
