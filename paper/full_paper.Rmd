@@ -24,10 +24,10 @@ header-includes:
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
-geometry: margin=1.5in
+geometry: margin=1in
 fontsize: 12pt
 ---
-\vspace{-3mm}
+\vspace{-2mm}
 ```{=latex}
 \keywords{word1, word2, word3}
 ```
@@ -39,6 +39,10 @@ knitr::opts_chunk$set(message = FALSE,
                       warning = FALSE,
                       fig.pos = "H")
 ```
+
+\normalsize
+
+\onehalfspacing
 
 \newpage
 
@@ -94,8 +98,21 @@ Sim study
 
 @Demirtas2019 Paper describing the algorithm to induce the correlation that we want.
 
+3 uniform rvs
+but 2 are correlated
 
-In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds.
+
+In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. There are two crucial assumptions to our simulation approach
+
+*   **Uniform ranks**
+
+*   **Correlation between events**
+
+
+
+
+
+
 
 Given that 
 
