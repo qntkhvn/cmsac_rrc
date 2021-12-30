@@ -18,7 +18,7 @@ header-includes:
  \setlength{\parskip}{2mm}
  \usepackage{float}
  \floatplacement{figure}{H}
- \usepackage{caption}
+ \usepackage[skip=4pt]{caption}
  \captionsetup[figure]{font=small}
  \captionsetup[table]{font=small}
  \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
@@ -107,30 +107,21 @@ In this section, we perform a simulation study to examine the rankings and scori
 
 \vspace{-3mm}
 
-*   **Uniform ranks**. The ranks within each discipline is randomly sampled from a discrete uniform distribution with bounds $[1, 8]$ and $[1, 20]$ for the qualification and final rounds, respectively
+*   **Uniform ranks**. The ranks within each discipline come from a discrete uniform distribution with bounds $[1, 8]$ and $[1, 20]$ for the qualification and final rounds, respectively
 
 *   **Correlation between events**. We want to introduce dependence in the ranks between the disciplines. In particular, based on the claim that "Speed climbing is a sport within our sport" mentioned in Section 1, we assume a correlation between bouldering and lead climbing, whereas speed climbing is completely independent of the other two events. 
 
 \vspace{-3mm}
 
-In order to generate data that satisfy the simulation assumptions listed above, we rely on a framework proposed by @Demirtas2019 for inducing the correlation between bouldering and lead ranks with uniform marginals. We choose Spearman's rank correlation coefficient [@spearman] and our measurement of association between the bouldering and lead disciplines. Our examination considers five different levels of correlation: $0$ (no correlation), $0.25$ (low), $0.5$ (moderate), $0.75$ (high), and $1$ (perfect). 
+In order to generate data that satisfy the simulation assumptions listed above, we rely on a framework proposed by @Demirtas2019 for inducing the correlation between bouldering and lead ranks with uniform marginals. We choose Spearman's rank correlation coefficient [@spearman] as our measurement of association between the bouldering and lead disciplines. Our examination considers five different levels of correlation: $0$ (no correlation), $0.25$ (low), $0.5$ (moderate), $0.75$ (high), and $1$ (perfect). 
 
-For each correlation value, we first 
+For each correlation value, we first generated a population of size $N=100000$ consisting of randomly-drawn values from a standard uniform distribution for the three climbing events speed, bouldering, and lead. Using @Demirtas2019's algorithm, we first sorted the lead column in ascending order, then randomly pick out a fraction of the bouldering column equal to the desired correlation, and ascending-sort these sampled values. Once the data are sorted, we randomly sample either 8 (for qualification) or 20 (for final) rows from the population, and rank the values within each discipline. Here, our data generation process ensures that the final data was randomly selected from a population with a specified correlation structure between bouldering and lead. 
 
-
-generate a marginal of size 100000 then
-
-we sorted the lead column in ascending order
-then randomly pick out a fraction of the bouldering column associated with the desired correlation value, and sort those randomly-sampled indices
-
-then randomly sample either 8 or 20
-then repeat n=10000 times and got the sim results
-
-
+Finally, we repeat the same procedure $10000$ times for each correlation level.  After the simulations are complete, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions.
 
 \ref{fig:corr}
 
-```{r corr, fig.cap="something", fig.height=3.5, fig.width=7}
+```{r corr, fig.cap="something", fig.height=3.5, fig.width=7.5}
 library(tidyverse)
 theme_set(theme_minimal())
 sim_results <- read_rds("sim_corr_results.rds")
@@ -377,7 +368,7 @@ drop_rerank <- function(df) {
   
   return(rerank_df)
 }
-fig_iia <- drop_rerank(wf) %>% 
+drop_rerank(wf) %>% 
   mutate(last = fct_reorder(last, -rank),
          rank = as.factor(rank),
          rank_change = ifelse(
