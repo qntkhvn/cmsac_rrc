@@ -20,6 +20,11 @@ dat$lead[ind] <- sort(dat$lead[ind])
 dat$bouldering[ind] <- sort(dat$bouldering[ind])
 cor(dat, method = "spearman")
 
+ind2 <- sample(1:nsim, 20, replace = FALSE)
+
+dat[ind2, ]
+
+
 # Now we have the "population" that has the desired correlation.
 test <- c()
 for (i in 1:10000) {

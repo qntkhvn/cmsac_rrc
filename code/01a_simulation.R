@@ -11,6 +11,7 @@ qual_dist_list <- final_dist_list <- list()
 # player ID, the discipline ranks, overall score, final rank, sim number
 # Here we add in correlation between bouldering and lead. 
 # We test 3 values 0.25, 0.5, and 0.75
+
 climbing_sim_cor <- function(nsim = 10000, nplay, rho = 0) {
   sims <- list()
   #Number of points in the population 
@@ -51,7 +52,7 @@ climbing_sim_cor <- function(nsim = 10000, nplay, rho = 0) {
 set.seed(1)
 cor_vec <- seq(0, 1, length = 5)
 
-for (rrr in 1:length(cor_vec)){
+for (rrr in 1:length(cor_vec)) {
   
   print(rrr)
   qual <- climbing_sim_cor(nsim = 10000, nplay = 20, rho = cor_vec[rrr])
@@ -86,29 +87,53 @@ for (rrr in 1:length(cor_vec)){
   final_dist_list[[rrr]] <- final_dist
 }
 
+# export sim results 
+sim_corr_results <- bind_rows(qual_dist_list) %>% 
+  bind_rows(final_dist_list)
 
-final_dist_stack <- bind_rows(final_dist_list)
-ggplot(aes(x = rho, y = value, color = factor(rank)), data = subset(final_dist_stack,type == "Probability")) + geom_line()
+# write_rds(sim_corr_results, "paper/sim_corr_results.rds")
+
+# ggplot(aes(x = rho, y = value, color = factor(rank)), data = subset(final_dist_stack, type == "Probability")) + 
+#   geom_point() +
+#   geom_line()
+
+
+bind_rows(final_dist_list) %>% 
+  bind_rows(tibble(rank = 7, type = c("Probability", "Cumulative"), value = 0:1, round = "Final", rho = 1)) %>%
+  filter(type == "Probability") %>% 
+  ggplot(aes(x = rho, y = value, color = factor(rank))) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(breaks = seq(0, 0.5, 0.1)) +
+  labs(color = "Rank",
+       x = "Spearman Correlation",
+       y = "Probability")
+
+
+bind_rows(final_dist_list) %>% 
+  count(rank)
 
 # plot distributions, faceted by round
-qual_dist %>%
-  bind_rows(final_dist) %>%
+library(gganimate)
+bind_rows(qual_dist_list) %>%
+  bind_rows(final_dist_list) %>%
   mutate(round = fct_relevel(round, "Qualification")) %>%
   ggplot(aes(rank, value, fill = type)) +
   geom_col(position = "dodge") +
   facet_wrap(~ round, scales = "free") +
-  scale_x_reverse(breaks = 1:11) +
+  scale_x_reverse(breaks = 1:12) +
   coord_flip() +
   labs(x = "Rank",
        y = "Probability Density",
        fill = "Distribution") +
   scale_fill_manual(values = c("maroon", "midnightblue")) +
   theme(panel.grid.major.y = element_blank()) +
-  theme(
-    legend.position = "bottom",
-    legend.margin = margin(-5),
-    legend.key.size = unit(0.4, "cm")
-  )
+  theme(legend.position = "bottom",
+        legend.margin = margin(-5),
+        legend.key.size = unit(0.4, "cm")) +
+  transition_states(rho) +
+  labs(title = "Spearman correlation between lead and bouldering: {closest_state}")
+  
 
 # Question: What's the expected score for each rank in both qualification and final?
 
