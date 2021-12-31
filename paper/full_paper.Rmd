@@ -7,7 +7,7 @@ output:
     keep_tex: no
 abstract: Sport climbing, which made its Olympic debut at the 2020 Summer Games, generally consists of three separate disciplines\text{:} speed climbing, bouldering, and lead climbing. However, the International Olympic Committee (IOC) only allowed one set of medals per gender for sport climbing. As a result, the governing body of sport climbing, rather than choosing only one of the three disciplines to include in the Olympics, decided to create a competition combining all three disciplines. In order to determine a winner, a combined scoring system was created using the product of the ranks across the three disciplines to determine an overall score for each climber. In this work, the rank-product scoring system of sport climbing is evaluated through simulation to investigate its general features, specifically, the advancement probabilities and scores for climbers given certain placements. Additionally, analyses of historical climbing contest results are presented and real examples of violations of the independence of irrelevant alternatives are illustrated. Finally, this work finds evidence that the current competition format is putting speed climbers at a disadvantage.
 header-includes:
- \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} \texttt{nnguyen22@luc.edu}} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{2mm} \\
+ \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{2mm} \\
   \small \textsuperscript{1}Department of Mathematics and Statistics \\
   \small Loyola University Chicago \\
   \small Chicago, IL 60660 \vspace{2mm} \\
@@ -19,10 +19,10 @@ header-includes:
  \usepackage{setspace}
  \setlength{\parskip}{2mm}
  \usepackage{float}
- \floatplacement{figure}{H}
+ \floatplacement{figure}{h}
  \usepackage[skip=4pt]{caption}
- \captionsetup[figure]{font=small}
- \captionsetup[table]{font=small}
+ \captionsetup[figure]{font=normalsize}
+ \captionsetup[table]{font=normalsize}
  \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
 bibliography: ref.bib
 csl: ref_style.csl
@@ -36,16 +36,14 @@ fontsize: 12pt
 ```
 
 ```{r setup, include=FALSE}
- # \floatplacement{figure}{H}
 knitr::opts_chunk$set(message = FALSE,
                       echo = FALSE,
-                      warning = FALSE,
-                      fig.pos = "H")
+                      warning = FALSE)
 ```
 
-\normalsize
+\setstretch{1.5}
 
-\onehalfspacing
+\normalsize
 
 \newpage
 
@@ -89,42 +87,31 @@ To date, we find a couple of pieces of work that have proposed alternative rank 
 
 In this paper, we perform statistical analysis to investigate the limitations of sport climbing's combined competition format and ranking system. We will evaluate whether the concerns of the professional climbers were valid. The manuscript is outlined as follows. We first begin with a simulation study to examine the key properties of rank-product scoring in sport climbing in Section 2. Our analyses of past competition data are then presented in Sections 3. Finally, in Section 4, we provide a summary of our main findings as well as some discussion to close out the paper.
 
+\vspace{-5mm}
+
 # Simulation Study
-
-<!-- Sim study -->
-<!-- - write again -->
-<!-- - describe, mention the sim corr paper -->
-<!-- - figures: -->
-<!--   + prob of finishing 1st goes up -->
-<!--   + pick a corr (0.5?) and display the graphs -->
-<!--     (distributions of rank and score) like before -->
-
-<!-- @Demirtas2019 Paper describing the algorithm to induce the correlation that we want. -->
-
-<!-- 3 uniform rvs -->
-<!-- but 2 are correlated -->
-
 
 In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. There are two crucial assumptions to our simulation approach:
 
 \vspace{-2mm}
 
-*   **Uniform ranks**. The ranks within each discipline come from a discrete uniform distribution with bounds $[1, 8]$ and $[1, 20]$ for the qualification and final rounds, respectively
+*   **Uniform ranks**. The ranks within each discipline follow a discrete uniform distribution with bounds $[1, 8]$ and $[1, 20]$ for the qualification and final rounds, respectively
 
-*   **Correlation between events**. We want to introduce dependence in the ranks between the disciplines. In particular, based on the claim that "Speed climbing is a sport within our sport" mentioned in Section 1, we assume a correlation between bouldering and lead climbing, whereas speed climbing is completely independent of the other two events. 
+*   **Correlation between events**. We want to introduce dependence in the ranks between the disciplines. In particular, based on the claim that "Speed climbing is a sport within our sport" mentioned in Section 1, a correlation between bouldering and lead climbing is assumed, whereas speed climbing is completely independent of the other two events. 
 
 \vspace{-2mm}
 
 In order to generate data that satisfy the simulation assumptions listed above, we rely on a framework proposed by @Demirtas2019 for inducing the correlation between bouldering and lead ranks with uniform marginals. We choose Spearman's rank correlation coefficient [@spearman] as our measurement of association between the bouldering and lead disciplines. Our examination considers five different levels of correlation: $0$ (no correlation), $0.25$ (low), $0.5$ (moderate), $0.75$ (high), and $1$ (perfect). 
 
-For each correlation value, we first generated a population of size $N=100000$ consisting of randomly-drawn values from a standard uniform distribution for the three climbing events speed, bouldering, and lead. Using @Demirtas2019's algorithm, we first sorted the lead column in ascending order, then randomly pick out a fraction of the bouldering column equal to the desired correlation, and ascending-sort these sampled values. Once the data are sorted, we randomly sample either 8 (for qualification) or 20 (for final) rows from the population, and rank the values within each discipline. Here, our data generation process ensures that the final data was randomly selected from a population with a specified correlation structure between bouldering and lead. 
+For each correlation value, we first generated a population of size $N=100000$ consisting of randomly-drawn values from a standard uniform distribution for the three climbing events speed, bouldering, and lead. Using @Demirtas2019's algorithm, we first sorted the lead column in ascending order, then randomly picked out a fraction of the bouldering column equal to the desired correlation, and ascending-sort these sampled values. Once the data have been sorted, we randomly sampled either 8 (for qualification) or 20 (for final) rows from the population, and ranked the values within each discipline. Here, our data generation process ensures that the final data were randomly selected from a population with a specified correlation structure between bouldering and lead. 
 
-Finally, we repeat the same procedure $10000$ times for each correlation level.  After the simulations are complete, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions.
+Finally, we repeated the same procedure $10000$ times for each correlation level.  After the simulations were complete, we calculated the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions.
 
-After obtaining the simulation results, we summarized the advancement probabilities for both qualifying and final rounds, looking for trends over the correlation values. Figure 1 displays the probability of finishing at each rank of both qualification and final rounds for each of the 5 correlation values we considered, given that a climber wins any discipline. Notably speaking, the probabilities of finishing first in both climbing stages increase and the correlation magnitude goes up. The plot also reveals that if the two events lead and bouldering are perfectly correlated, the probability of a climber claiming first place overall after winning any event in qualification and final are within 0.5. This suggests that the competition becomes sort of a two-event contest rather than three-event, as winning 
+<!-- need to polish this part again -->
 
+After obtaining the simulation output, we summarized the advancement probabilities for both qualifying and final rounds, looking for trends over the correlation values. Figure 1 displays the probability of finishing at each rank of both qualification and final rounds for each of the 5 correlation values we considered, given that a climber wins any discipline. Notably speaking, the probabilities of finishing first in both climbing stages increase as the correlation magnitude goes up. The figure also reveals that if the two events lead and bouldering are perfectly correlated, the probability of a climber claiming first place overall after winning any event in qualification and final are within 0.5. This suggests that the competition becomes sort of a two-event contest rather than three-event, as for each round, winning any event essentially guarantees that a climber would finish first half of the times
 
-```{r corr, fig.cap="The advancement probabilities for qualification and final obtained from simulation for each Spearman correlation level, color coded by overall rank", fig.height=3.6, fig.width=7.5}
+```{r corr, fig.cap="The advancement probabilities for qualification and final, given that a climber wins any discipline, obtained from simulation for each Spearman correlation level, color coded by overall rank", fig.height=3.6, fig.width=7.5}
 library(tidyverse)
 theme_set(theme_minimal())
 sim_results <- read_rds("sim_corr_results.rds")
@@ -266,7 +253,7 @@ final %>%
   theme(panel.grid.major.x = element_blank())
 ```
 
-<!-- In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. For each round, we execute 10000 simulations, and this was accomplished by randomly assigning the ranks of each event to every participant, with the assumption that the ranks are uniformly distributed. After that, we calculate the total scores for every simulated round, as well as the final standings for the climbing athletes. The simulation results allow us to explore different properties of sport climbing's rank-product scoring system, including the distributions of total score for qualifying and final rounds, and the probabilities of advancing to the finals and winning a medal, given certain conditions.  -->
+\vspace{5mm}
 
 # Analysis
 
@@ -330,7 +317,7 @@ knitr::include_graphics("pca.png")
 
 ## Leave-one-climber-out Analysis
 
-Another question that we are interested in investigating is "What would happen to the rankings if a single climber is removed?". There is a connection between this situation and the idea of independence of irrelevant alternatives (IIA). The IIA criterion is a property of a voting system which states that after a winner is determined, if one of the losing candidates drops out and the votes are recounted, there should not be a change in the winner. First mentioned by @arrow1951, the IIA condition is also known as Luce's choice axiom [@luce1959] in probability theory, and it has had a number of applications in the fields of decision theory, economics, and psychology over the years. We notice a link between the concept of IIA and the topic of ranking system in sports. As an illustration, suppose we have 3 players A, B, and C participating in a competition. If A finishes in the first place and C is later disqualified and removed, A should still win. If the original winner (A) loses the modified competition (with C removed), then the Independence of Irrelevant Alternatives has been violated. For our particular case, this sort of analysis can be helpful in examining the overall outcome for a climbing contest, specifically how a disqualification can affect the standings of medalists in the final round.
+Another question that we are interested in investigating is "What would happen to the rankings if a single climber is removed?". There is a connection between this situation and the idea of independence of irrelevant alternatives (IIA). The IIA criterion is a property of a voting system which states that after a winner is determined, if one of the losing candidates drops out and the votes are recounted, there should not be a change in the winner. First mentioned by @arrow1951, the IIA condition is also known as Luce's choice axiom [@luce1959] in probability theory, and it has had a number of applications in the fields of decision theory, economics, and psychology over the years. We notice a link between the concept of IIA and the topic of ranking system in sports. As an illustration, suppose we have 3 players A, B, and C participating in a competition. If A finishes in the first place and C is later disqualified and removed, A should still win. If the original winner (A) loses the modified competition (with C removed), then the Independence of Irrelevant Alternatives has been violated. For our particular case, this type of analysis can be helpful in examining the overall outcome for a climbing contest, specifically how a disqualification can affect the standings of medalists in the final round.
 
 In the analysis that follows, we use data from the 2018 Youth Olympics Women's Final [@2018youth]. This event also implemented the combined format and rank-product scoring system, but only consisted of 6 climbers competing in the final, rather than 8 as Tokyo 2020. We modify the data as follows. After an athlete is dropped (by their rank), the new ranks for each discipline of the remaining players are re-calculated. The new final scores can then be obtained by multiplying the three event ranks, which then determines the new overall ranks.
 
@@ -399,14 +386,15 @@ drop_rerank(wf) %>%
         panel.grid.minor = element_blank())
 ```
 
-
 # Conclusion and Discussion
+
+\vspace{-2mm}
 
 In this paper, we examined the general features of the rank-product scoring system of sport climbing, in particular, the advancement probabilities and scores for the climbers. Most importantly, through analyses of past competition data, we pointed out several problems of the combined competition format and rank-product scoring system of sport climbing. First, combining the three disciplines speed, bouldering, and lead together into a "triathlon" competition format is putting speed climbers in an unfavorable position. Second, the sport climbing scoring method violates the independence of irrelevant alternatives. There is a dependency on irrelevant parties in this scoring method, as the orderings of medalists can be affected with a drop-out of a lower-ranked climber.
 
 While we did not attempt to propose a new scoring method to replace rank-product scoring in combined climbing contest, we instead have a suggestion to modify the overall structure of the competition. In particular, we suggest that speed climbing should have its own set of medals in future climbing tournaments, whereas bouldering and lead climbing can be combined into one event. In fact, it was confirmed that in the next Summer Olympics held in Paris in 2024, there will be two competitions and two sets of climbing medals for each gender event: combined lead and bouldering, and speed-only [@goh2020]. This is consistent with what we have shown, as bouldering and lead climbing performances are highly correlation with each other and with the overall result, whereas speed climbing should be separated from the combined format.
 
-<!-- In closing, there are so many sports, similar to sport climbing, that have generally been untouched in terms of analytics. With the rise of statistics and data science applications in sports, we hope that more people will be interested in working on data problems related to sport climbing in order to make this sport better. One possible future work we could look into is turning the data we collected for this project into an accessible package or database of historical climbing competition results, which would be vital in promoting more engagements in the analytics of sport climbing. -->
+\vspace{-5mm}
 
 # Acknowledgements {-}
 
@@ -414,6 +402,6 @@ The authors would like to acknowledge the organizers of the 2021 UConn Sports An
 
 # Supplementary Material {-}
 
-All data and code for reproducing the analyses presented in this manuscript are publicly available on GitHub at `https://github.com/qntkhvn/cmsac_rrc`.
+All data and code for reproducing the analyses presented in this manuscript are publicly available on GitHub at <https://github.com/qntkhvn/cmsac_rrc>.
 
 # References
