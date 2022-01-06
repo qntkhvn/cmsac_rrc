@@ -289,6 +289,9 @@ final %>%
   theme(panel.grid.major.x = element_blank())
 ```
 
+<!--  A major concern about the combined format for sport climbing is the disadvantage to speed specialists (those who focus primarily on minimizing their time to top the standardized speed route). It has been said that there is little skill crossover between speed climbing and the other two disciplines. This begs the question: "How likely is for a speed specialist to make it to finals and the podium?" Our simulated case study, proposing a .75 Spearman correlation between rankings for bouldering and lead, with speed climbing entirely independent suggests that a speed specialist (defined here to be the top rank in speed) still has a relatively high probability of making it to finals (98.42%) and has a 75% chance to win a medal. A contestant who has ranked first in bouldering or lead however, has a 99.80% chance to make it to the finals and a 94.06% probability of winning a medal. Further, the top-ranked speed contestant in finals only has an 8% chance to win gold, compared to a 66% chance for a contestant that ranks first in bouldering or lead.
+-->
+
 \vspace{5mm}
 
 # Analysis
