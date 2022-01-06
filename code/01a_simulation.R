@@ -1,9 +1,13 @@
 # Simulation study
+# 01/06/2022 - Hannah is adding in some comments so that she knows whats going on
 
 # Packages
 library(tidyverse)
 theme_set(theme_minimal())
 qual_dist_list <- final_dist_list <- list()
+
+# HB - storing probabilities of speed specialists making finals/podium
+speed_results_list_q <- speed_results_list_f <- BL_results_list_q <- BL_results_list_f <- list()
 
 # simulation, assuming uniform ranks
 # this function takes in the number of simulations and players 
@@ -60,6 +64,48 @@ for (rrr in 1:length(cor_vec)) {
   
   #correlation on the x axis vs advancement probability?  
   #correlation on the x axis vs medal probability in the finals?    
+  
+  # HB - speed specialist results ------
+  # probability that rank 1 in speed makes qualifiers
+  speed_res_qual <- qual %>%
+    group_by(e1) %>%
+    summarize(finalist_prob = mean(rank <= 8)
+              , rho = cor_vec[rrr]
+              )
+  
+  # prob that rank 1 in bould/lead makes finals
+  BL_res_qual <- qual %>%
+    group_by(e2 == 1 | e3 == 1) %>%
+    summarize(finalist_prob = mean(rank <= 8)
+              , rho = cor_vec[rrr]
+              )
+  
+  # probability that rank 1 in speed makes podium
+  speed_res_fin <- final %>%
+    group_by(e1) %>%
+    summarize(podium_prob = mean(rank <= 3)
+              , bronze_prob = mean(rank == 3)
+              , silver_prob = mean(rank == 2)
+              , gold_prob = mean(rank == 1)
+              , rho = cor_vec[rrr]
+              )
+  
+  # prob that rank 1 in bould/lead makes podium
+  BL_res_fin <- final %>%
+    group_by(e2 == 1 | e3 == 1) %>%
+    summarize(podium_prob = mean(rank <= 3)
+              , bronze_prob = mean(rank == 3)
+              , silver_prob = mean(rank == 2)
+              , gold_prob = mean(rank == 1)
+              , rho = cor_vec[rrr]
+              )
+  
+  # store results in lists
+  speed_results_list_q[[rrr]] <- speed_res_qual
+  speed_results_list_f[[rrr]] <- speed_res_fin
+  BL_results_list_q[[rrr]] <- BL_res_qual
+  BL_results_list_f[[rrr]] <- BL_res_fin
+  # -------------------------------------
   
   # qualification distribution
   qual_dist <- qual %>%
