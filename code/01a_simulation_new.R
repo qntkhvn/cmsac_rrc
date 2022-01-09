@@ -92,7 +92,7 @@ for (rrr in 1:length(cor_vec)) {
   
   # prob that rank 1 in bould/lead makes podium
   BL_res_fin <- final %>%
-    group_by(e2 == 1 | e3 == 1) %>%
+    group_by(BL = e2 == 1 | e3 == 1) %>%
     summarize(podium_prob = mean(rank <= 3)
               , bronze_prob = mean(rank == 3)
               , silver_prob = mean(rank == 2)
@@ -218,3 +218,37 @@ final_score %>%
        y = "Average Score") +
   theme(panel.grid.major.x = element_blank())
 
+
+### visualize speed results (probabilities of medalling in finals)
+speed_final_results <- speed_results_list_f %>%
+  do.call(rbind, .) %>%
+  mutate(event = "speed") %>%
+  filter(e1 == 1) %>%
+  select(-e1)
+
+BL_final_results <- BL_results_list_f %>%
+  do.call(rbind, .) %>%
+  mutate(event = "bould/lead") %>%
+  filter(BL == TRUE) %>%
+  select(-BL)
+
+podium_probs <- rbind(speed_final_results, BL_final_results) %>%
+  pivot_longer(podium_prob:gold_prob, names_to = "Medal") %>%
+  mutate(Medal = ifelse(Medal == "gold_prob", "Gold", Medal)
+         , Medal = ifelse(Medal == "silver_prob", "Silver", Medal)
+         , Medal = ifelse(Medal == "bronze_prob", "Bronze", Medal)
+         ) %>%
+  filter(Medal != "podium_prob") %>%
+  mutate(color = ifelse(Medal == "Gold", "darkgoldenrod1", Medal)
+       , color = ifelse(Medal == "Silver", "azure3", color)
+       , color = ifelse(Medal == "Bronze", "sienna", color)
+       )
+
+podium_probs %>%
+  ggplot(aes(rho, value)) +
+  geom_path(aes(color = Medal)) +
+  geom_point(aes(color = Medal)) +
+  facet_wrap(~event) +
+  xlab("Spearman Correlation") +
+  ylab("Medal Probability") +
+  scale_color_manual(values = c("sienna", "darkgoldenrod1", "azure3"))
