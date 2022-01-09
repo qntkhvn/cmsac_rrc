@@ -237,18 +237,16 @@ podium_probs <- rbind(speed_final_results, BL_final_results) %>%
   mutate(Medal = ifelse(Medal == "gold_prob", "Gold", Medal)
          , Medal = ifelse(Medal == "silver_prob", "Silver", Medal)
          , Medal = ifelse(Medal == "bronze_prob", "Bronze", Medal)
-         ) %>%
-  filter(Medal != "podium_prob") %>%
-  mutate(color = ifelse(Medal == "Gold", "darkgoldenrod1", Medal)
-       , color = ifelse(Medal == "Silver", "azure3", color)
-       , color = ifelse(Medal == "Bronze", "sienna", color)
-       )
+         , Medal = ifelse(Medal == "podium_prob", "Any", Medal)
+         )
 
 podium_probs %>%
+  filter(Medal %in% c("Gold", "Any")) %>%
   ggplot(aes(rho, value)) +
   geom_path(aes(color = Medal)) +
   geom_point(aes(color = Medal)) +
   facet_wrap(~event) +
   xlab("Spearman Correlation") +
   ylab("Medal Probability") +
-  scale_color_manual(values = c("sienna", "darkgoldenrod1", "azure3"))
+  scale_color_manual(values = c("midnightblue", "darkgoldenrod1")) +
+  ylim(c(0, 1))
