@@ -23,7 +23,7 @@ header-includes:
  \usepackage[skip=4pt]{caption}
  \captionsetup[figure]{font=normalsize}
  \captionsetup[table]{font=normalsize}
- \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rankings, sports statistics}
+ \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rank-product scoring, sports statistics}
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
@@ -86,15 +86,14 @@ where $R^S_i$, $R^B_i$, and $R^L_i$ are the ranks of the $i$-th competitor in sp
 
 <!-- maybe include that in preparation for the tokyo 2020 games, climbing competitions incorporated the scoring format, and the data used is from those competitions? -->
 
-<!-- The 8 climbers with the lowest score in terms of product of ranks across the three disciplines qualifiy for the finals where they once again compete in all three events. Similar to qualification, the overall score for each contestant in the final stage is determined by multiplying the placement of speed, bouldering, and lead disciplines, and the athletes are ranked from 1 to 8. The climbers with the lowest, second lowest, and third lowest product of ranks in the final wins the gold, silver, and bronze medal, respectively.  -->
-
 The 8 climbers with the lowest combined score <!--in terms of product of ranks across the three disciplines--> qualifiy for the finals where they once again compete in all three events. Similar to qualification, the overall score for each contestant in the final stage is determined by (\ref{eq:1})<!--by multiplying the placement of speed, bouldering, and lead disciplines-->, and the athletes are ranked from 1 to 8. The climbers with the lowest, second lowest, and third lowest combined score in the final wins the gold, silver, and bronze medal, respectively. 
+
+<!-- The 8 qualifiers with the lowest score in terms of product of ranks across the three disciplines advance to the finals, where they once again compete in all three events. Similar to qualification, the overall score for each contestant in the final stage is determined by multiplying the placement of speed, bouldering, and lead disciplines, and the athletes are ranked from 1 to 8. The climbers with the lowest, second lowest, and third lowest product of ranks in the final wins the gold, silver, and bronze medal, respectively.  -->
+
 
 This type of scoring system heavily rewards high finishes and relatively ignores poor finishing results. For instance, if climber A finished 1st, 20th, and 20th and climber B finished 10th, 10th, and 10th, climber B would have a score of 1000 whereas climber A would have a much better score of 400, despite finishing last in 2 out of 3 of the events.  
 
 To the best of our knowledge, we know of no sporting event, team or individual, that uses the product of ranks to determine an overall rankings. There are examples of team sports that use the rank-sum scoring to determine the winning team such as cross country where the squad with the lowest sum of ranks of the top five runners is awarded with a first place finish. @hammond2007 and @boudreau2018 pointed out several problems with rank-sum scoring in cross country, including violations of social choice principles. In addition, some individual sports such as the decathlon and heptathlon rely on a sum of scores from the ten or seven events. However, these scores are not determined based on the ranks of the competitors. That is, a decathlete's score is entirely based upon their own times, distances, and heights, and their overall score will <!-- be exactly the same if the times, distances, and heights--> remain the same regardless of the performance of other individuals [@westera2006]. On the other hand <!--Furthermore-->, there are other individual competitions consisting of several events combined, such as crossfit, that do base their scoring on ranks. In each event, points are earned based on the competitor's rank in the event based on a scoring table, and a competitors final score is based on the sum of their scores across all the events [@crossfit2021]. 
-
-
 
 <!--
 
@@ -109,8 +108,8 @@ They show that in the finals of the men's competition that if rank sum was used 
 To date, there are several articles that have proposed alternative rank aggregation methods for the sport climbing combined format. First, @Parker2018 investigated a variety of approaches to rank and score climbing athletes, namely, geometric mean, Borda count, linear programming, geometric median, top score method, ABS10, and what they refer to as the "merged method." Eventually, they recommended the merged method, which is a combination of the top score and ABS10 methods as a reasonable scoring approach for climbing due to predictive power and satisfaction of social choice theory. More recently, @StinsonStinson2021 compared the current rank-product scoring method with rank-sum scoring and observed a dramatic change to the outcome of the men's sport climbing final at the 2020 Olympics when the sum of discipline rankings was used instead of the product. Specifically, Tomoa Narasaki, who finished fourth overall at Tokyo 2020, would have won the gold medal if rank-sum was used as the method of scoring instead of rank-product <!-- (\ref{eq:1}) -->. Furthermore, they proposed an alternative ranking-based scoring method that computes the sum of the square roots of each climber's rankings as their combined score.
 
 As a side note, there are applications of the rank-product statistic in other fields. For example, the rank product statistic can be used to analyze replicated microarray experiments and identify differentially expressed genes. See @Breitling2004 for more information on this statistical procedure.
-<!-- Maybe we move this little blurb to the end of the section.
 
+<!-- Maybe we move this little blurb to the end of the section.
 I moved this to the end of the section.  You good with that?-->
 
 In this paper, we perform statistical analysis to investigate the limitations of sport climbing's combined competition format and ranking system. We will evaluate whether the concerns of the professional climbers were valid. The manuscript is outlined as follows. We first begin with a simulation study to examine the key properties of rank-product scoring in sport climbing in Section 2. Our analyses of past competition data are then presented in Sections 3. Finally, in Section 4, we provide a summary of our main findings as well as some discussion to close out the paper.
@@ -123,6 +122,8 @@ In this paper, we perform statistical analysis to investigate the limitations of
 
 # Simulation Study
 
+\vspace{-2mm}
+
 In this section, we perform a simulation study to examine the rankings and scoring for climbers in both qualification and final rounds. There are two crucial assumptions to our simulation approach:
 
 \vspace{-2mm}
@@ -131,9 +132,7 @@ In this section, we perform a simulation study to examine the rankings and scori
 
 *   **Correlation between events**: We want to introduce dependence in the ranks between the disciplines. In particular, based on the claim that "Speed climbing is a sport within our sport" mentioned in Section 1, a correlation between bouldering and lead climbing is assumed, whereas speed climbing is assumed completely independent of the other two events.
 
-
-
-\vspace{-2mm}
+<!-- \vspace{-2mm} -->
 
 In order to generate data that satisfy the simulation assumptions listed above, we rely on a framework proposed by @Demirtas2019 for inducing the correlation between bouldering and lead ranks with discrete uniform marginals. We choose Spearman's rank correlation coefficient [@spearman] as our measurement of association between the bouldering and lead disciplines. Our examination considers five different levels of correlation between bouldering and lead climbing: $0$ (no correlation), $0.25$ (low), $0.5$ (moderate), $0.75$ (high), and $1$ (perfect). 
 
@@ -145,31 +144,56 @@ Finally, we repeated the same procedure $10000$ times for each correlation level
 
 <!-- I would write out a list with bullet points of the questions we want to answer here -->
 
-After obtaining the simulation output, we summarized the advancement probabilities for both qualifying and final rounds, looking for trends over the correlation values. Figure 1 displays the probability of finishing at each rank of both qualification and final rounds for each of the 5 correlation values we considered, given that a climber wins any discipline. Notably speaking, the probabilities of finishing first in both climbing stages increase as the correlation magnitude goes up. The figure also reveals that if the two events lead and bouldering are perfectly correlated, the probability of a climber claiming first place overall after winning any event in qualification and final are within 0.5. This suggests that the competition becomes sort of a two-event contest rather than three-event, as for each round, winning any event essentially guarantees that a climber would finish first half of the times
+<!-- After obtaining the simulation output, we summarized the advancement probabilities for both qualifying and final rounds, looking for trends over the correlation values. Figure 1 displays the probability of finishing at each rank of both qualification and final rounds for each of the 5 correlation values we considered, given that a climber wins any discipline. Notably speaking, the probabilities of finishing first in both climbing stages increase as the correlation magnitude goes up. The figure also reveals that if the two events lead and bouldering are perfectly correlated, the probability of a climber claiming first place overall after winning any event in qualification and final are within 0.5. This suggests that the competition becomes sort of a two-event contest rather than three-event, as for each round, winning any event essentially guarantees that a climber would finish first half of the times -->
+
+After obtaining the simulation output, we summarized the advancement probabilities for both qualifying and final rounds, looking for trends over the correlation values. Figure 1 displays the probability of finishing first in qualification and finals for each of the 5 correlation values we considered, color coded by whether a climber wins the speed event or wins one of bouldering and lead concentrations. It is easy to see that for both rounds, as the correlation magnitude increases, the win probability given a first-place finish in lead climbing or bouldering also goes up. In contrast, the probability of winning each round given a speed victory decreases across the correlation levels. Moreover, if the two disciplines lead and bouldering are perfectly correlated, the top-ranked speed contestant in the final round only has a 20% chance to win gold, compared to a 91.3% chance for a finalist that ranks first in bouldering or lead climbing. This suggests a potentially unfair disadvantage for speed specialists when participating in a competition structure that possesses little skill crossover between speed and the other two climbing disciplines, as many believed.
 
 <!-- It's more than suggesting it.  It literally would be a two event competition but with those events given heavier weighting than speed -->
 
-```{r corr, fig.cap="The advancement probabilities for qualification and final, given that a climber wins any discipline, obtained from simulation for each Spearman correlation level, color coded by overall rank", fig.height=3.6, fig.width=7.5}
+```{r corr, fig.cap="The probabilities of winning qualification and final rounds, given that a climber finishes first in speed versus finishes first in bouldering or lead, obtained from simulation for each Spearman correlation value.", fig.height=3.3, fig.width=5.2}
 library(tidyverse)
 theme_set(theme_minimal())
-sim_results <- read_rds("sim_corr_results.rds")
+sim_results <- read_csv("sim_results.csv")
 
 sim_results %>% 
-  filter(rank <= 10) %>% 
-  bind_rows(tibble(rank = 7, type = c("Probability", "Cumulative"), value = 0:1, round = "Final", rho = 1)) %>%
-  filter(type == "Probability") %>% 
-  mutate(round = fct_relevel(round, "Qualification")) %>%
-  ggplot(aes(x = rho, y = value, color = factor(rank))) +
+  group_by(rho, round) %>% 
+  filter(e1 == 1) %>%
+  count(rank) %>%
+  mutate(Probability = n / sum(n),
+         Cumulative = cumsum(Probability)) %>%
+  ungroup() %>% 
+  select(-n) %>% 
+  pivot_longer(Probability:Cumulative, names_to = "prob") %>% 
+  mutate(type = "Win Speed") %>% 
+  bind_rows(
+    sim_results %>% 
+      group_by(rho, round) %>% 
+      filter(e2 == 1 | e3 == 1) %>%
+      count(rank) %>%
+      mutate(Probability = n / sum(n),
+             Cumulative = cumsum(Probability)) %>%
+      ungroup() %>% 
+      select(-n) %>% 
+      pivot_longer(Probability:Cumulative, names_to = "prob") %>% 
+      mutate(type = "Win Bouldering or Lead")
+  ) %>% 
+  filter(rank == 1 & prob == "Cumulative") %>% 
+  mutate(round = fct_rev(round),
+         type = fct_rev(type)) %>%
+  ggplot(aes(rho, value, color = type)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
   facet_wrap(~ round) +
-  scale_y_continuous(breaks = seq(0, 0.5, 0.1)) +
-  scale_color_viridis_d() +
-  labs(color = "Rank",
+  scale_y_continuous(breaks = seq(0, 1, 0.1)) +
+  scale_color_manual(values = c("#FEBD18", "#922247")) +
+  labs(color = "Probability",
        x = "Spearman Correlation",
-       y = "Advancement Probability") +
-  theme(panel.grid.major.y = element_blank()) +
-  theme(legend.margin = margin(-5))
+       y = "Win Probability") +
+  theme(legend.margin = margin(-5),
+        legend.position = "bottom",
+        legend.key.size = unit(0.4, "cm"),
+        panel.grid.minor = element_blank()) +
+  expand_limits(y = c(0, 1))
 ```
 
 ```{r}
@@ -224,7 +248,7 @@ To further examine the advancement probabilities and scores for Olympics climbin
 
 *   For a finalist, what is the probability that they win a medal (i.e. finish in the top 3 of the finals), given that they win any discipline?
 
-\vspace{-2mm}
+<!-- \vspace{-2mm} -->
 
 Our simulation results, as illustrated by Figure 2, show that a climber is almost guaranteed to finish in the top 8 of qualification and advance to the final round if they win at least one of the three climbing concentrations (99.3% chance). Regarding the finals, a climber is also very likely to claim a top 3 finish and bring home a medal if they win any event (85.3% chance). Moreover, we notice that if a climber wins any discipline, they are also more likely to finish first overall than any other positions in the eventual qualification and final rankings. This shows how significant winning a discipline is to the overall competition outcome for any given climber.
 
@@ -368,7 +392,7 @@ In addition, we perform principal component analysis (PCA) to summarize the corr
 
 Figure 5 is a PCA biplot showing the PC scores of the climbers and loadings of the skill variables. We notice that the lead and bouldering performances strongly influence PC1, while speed time is the only variable contributing to PC2, separated from the other two skills. Moreover, since the two vectors representing the loadings for the bouldering and lead performances are close and form a small angle, the two variables they represent, bouldering tops and lead holds reached, are positively correlated. This implies that a climber that does well in bouldering is also very likely to deliver a good performance in lead climbing.
 
-```{r pca, out.width = "80%", fig.cap= "PCA Biplot for Women's Qualification at Tokyo 2020", fig.align="center"}
+```{r pca, out.width = "80%", fig.cap= "PCA Biplot for Women's Qualification at Tokyo 2020.", fig.align="center"}
 knitr::include_graphics("pca.png")
 ```
 
@@ -390,7 +414,7 @@ Figure 6 shows the modified versions of the rankings after each ranked climber i
 
 <!-- This reveals another issue of the sport climbing scoring system, which is that there is a dependency on irrelevant parties. -->
 
-```{r iia, fig.height=3.6, fig.width=6.5, fig.cap="This figure illustrates the changes to the 2018 Youth Olympics Women's Final rankings when each climber is left out. Each panel represents the rank of the drop-out athlete, with 0 being the original final results. Each case with a change in rank orderings is highlighted by a black panel border, and any player with a rank change is represented by a red-filled bar"}
+```{r iia, fig.height=3.6, fig.width=6.5, fig.cap="This figure illustrates the changes to the 2018 Youth Olympics Women's Final rankings when each climber is left out. Each panel represents the rank of the drop-out athlete, with 0 being the original final results. Each case with a change in rank orderings is highlighted by a black panel border, and any player with a rank change is represented by a red-filled bar."}
 wf <- read_csv("https://raw.githubusercontent.com/qntkhvn/climbing/main/data/2018_youth_olympics/women_final.csv")
 drop_rerank <- function(df) {
   rerank <- list()
