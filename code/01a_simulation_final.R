@@ -63,33 +63,6 @@ for (c in 1:length(cor_vec)) {
   final[[c]] <- climbing_sim_cor(nsim = 10000, nplay = 8, rho = cor_vec[c]) %>% 
     mutate(rho = cor_vec[c], round = "Final")
 }  
-  
-
-bind_rows(qual) %>% 
-  bind_rows(final) %>% 
-  group_by(rho, round) %>% 
-  filter(e1 == 1 | e2 == 1 | e3 == 1) %>%
-  count(rank) %>%
-  mutate(Probability = n / sum(n),
-         Cumulative = cumsum(Probability)) %>%
-  ungroup() %>% 
-  select(-n) %>% 
-  pivot_longer(Probability:Cumulative, names_to = "type") %>% 
-  filter(rank <= 10) %>% 
-  bind_rows(tibble(rank = 7, type = c("Probability", "Cumulative"), value = 0:1, round = "Final", rho = 1)) %>%
-  filter(type == "Probability") %>% 
-  mutate(round = fct_relevel(round, "Qualification")) %>%
-  ggplot(aes(x = rho, y = value, color = factor(rank))) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  facet_wrap(~ round) +
-  scale_y_continuous(breaks = seq(0, 0.5, 0.1)) +
-  scale_color_viridis_d() +
-  labs(color = "Rank",
-       x = "Spearman Correlation",
-       y = "Advancement Probability") +
-  theme(panel.grid.major.y = element_blank()) +
-  theme(legend.margin = margin(-5))
 
 sim_results <- bind_rows(qual) %>% 
   bind_rows(final)
@@ -119,18 +92,4 @@ sim_results %>%
       mutate(type = "Win Bouldering or Lead")
   ) %>% 
   filter(rank == 1 & prob == "Cumulative") %>% 
-  mutate(round = fct_relevel(round, "Qualification")) %>%
-  ggplot(aes(rho, value, color = type)) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  facet_wrap(~ round) +
-  scale_y_continuous(breaks = seq(0, 1, 0.1)) +
-  scale_color_manual(values = c("maroon", "midnightblue")) +
-  labs(color = "Probability",
-       x = "Spearman Correlation",
-       y = "Advancement Probability") +
-  theme(legend.margin = margin(-5),
-        legend.position = "bottom",
-        panel.grid.minor = element_blank()) +
-  expand_limits(y = c(0, 1))
-  
+  write_rds("paper/sim_results_plot.rds")

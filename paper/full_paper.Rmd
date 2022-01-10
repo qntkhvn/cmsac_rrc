@@ -1,5 +1,5 @@
 ---
-title: An Examination of Sport Climbing's Competition Format and Scoring System
+title: An Examination of Sport Climbing Competition Format and Scoring System
 output: 
   pdf_document: 
     number_sections: yes
@@ -7,7 +7,7 @@ output:
     keep_tex: no
 abstract: Sport climbing, which made its Olympic debut at the 2020 Summer Games, generally consists of three separate disciplines\text{:} speed climbing, bouldering, and lead climbing. However, the International Olympic Committee (IOC) only allowed one set of medals per gender for sport climbing. As a result, the governing body of sport climbing, rather than choosing only one of the three disciplines to include in the Olympics, decided to create a competition combining all three disciplines. In order to determine a winner, a combined scoring system was created using the product of the ranks across the three disciplines to determine an overall score for each climber. In this work, the rank-product scoring system of sport climbing is evaluated through simulation to investigate its general features, specifically, the advancement probabilities and scores for climbers given certain placements. Additionally, analyses of historical climbing contest results are presented and real examples of violations of the independence of irrelevant alternatives are illustrated. Finally, this work finds evidence that the current competition format is putting speed climbers at a disadvantage.
 header-includes:
- \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Gregory J. Matthews\textsuperscript{1}, Hannah Butler\textsuperscript{2} \vspace{2mm} \\
+ \author{Quang Nguyen\textsuperscript{1}\thanks{Corresponding author. Email\text{:} nnguyen22@luc.edu} , Hannah Butler\textsuperscript{2}, and Gregory J. Matthews\textsuperscript{1}  \vspace{2mm} \\
   \small \textsuperscript{1}Department of Mathematics and Statistics \\
   \small Loyola University Chicago \\
   \small Chicago, IL 60660 \vspace{2mm} \\
@@ -153,31 +153,8 @@ After obtaining the simulation output, we summarized the advancement probabiliti
 ```{r corr, fig.cap="The probabilities of winning qualification and final rounds, given that a climber finishes first in speed versus finishes first in bouldering or lead, obtained from simulation for each Spearman correlation value.", fig.height=3.3, fig.width=5.2}
 library(tidyverse)
 theme_set(theme_minimal())
-sim_results <- read_csv("sim_results.zip")
 
-sim_results %>% 
-  group_by(rho, round) %>% 
-  filter(e1 == 1) %>%
-  count(rank) %>%
-  mutate(Probability = n / sum(n),
-         Cumulative = cumsum(Probability)) %>%
-  ungroup() %>% 
-  select(-n) %>% 
-  pivot_longer(Probability:Cumulative, names_to = "prob") %>% 
-  mutate(type = "Win Speed") %>% 
-  bind_rows(
-    sim_results %>% 
-      group_by(rho, round) %>% 
-      filter(e2 == 1 | e3 == 1) %>%
-      count(rank) %>%
-      mutate(Probability = n / sum(n),
-             Cumulative = cumsum(Probability)) %>%
-      ungroup() %>% 
-      select(-n) %>% 
-      pivot_longer(Probability:Cumulative, names_to = "prob") %>% 
-      mutate(type = "Win Bouldering or Lead")
-  ) %>% 
-  filter(rank == 1 & prob == "Cumulative") %>% 
+read_rds("sim_results_plot.rds") %>% 
   mutate(round = fct_rev(round),
          type = fct_rev(type)) %>%
   ggplot(aes(rho, value, color = type)) +
@@ -232,7 +209,6 @@ climbing_sim_cor <- function(nsim = 10000, nplay, rho = 0) {
   
   return(results)
 }
-
 set.seed(1)
 qual <- climbing_sim_cor(nsim = 10000, nplay = 20, rho = 0.75)
 final <- climbing_sim_cor(nsim = 10000, nplay = 8, rho = 0.75)
@@ -491,6 +467,6 @@ The authors would like to acknowledge the organizers of the 2021 UConn Sports An
 
 # Supplementary Material {-}
 
-All data and code for reproducing the analyses presented in this manuscript are publicly available on GitHub at <https://github.com/qntkhvn/cmsac_rrc>.
+All data and code for reproducing the analyses presented in this manuscript are publicly available on GitHub at <https://github.com/qntkhvn/climbing>.
 
 # References
