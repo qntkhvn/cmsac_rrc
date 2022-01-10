@@ -69,36 +69,32 @@ for (rrr in 1:length(cor_vec)) {
   # probability that rank 1 in speed makes qualifiers
   speed_res_qual <- qual %>%
     group_by(e1) %>%
-    summarize(finalist_prob = mean(rank <= 8)
-              , rho = cor_vec[rrr]
-              )
+    summarize(finalist_prob = mean(rank <= 8), 
+              rho = cor_vec[rrr])
   
   # prob that rank 1 in bould/lead makes finals
   BL_res_qual <- qual %>%
     group_by(e2 == 1 | e3 == 1) %>%
-    summarize(finalist_prob = mean(rank <= 8)
-              , rho = cor_vec[rrr]
-              )
+    summarize(finalist_prob = mean(rank <= 8), 
+              rho = cor_vec[rrr])
   
   # probability that rank 1 in speed makes podium
   speed_res_fin <- final %>%
     group_by(e1) %>%
-    summarize(podium_prob = mean(rank <= 3)
-              , bronze_prob = mean(rank == 3)
-              , silver_prob = mean(rank == 2)
-              , gold_prob = mean(rank == 1)
-              , rho = cor_vec[rrr]
-              )
+    summarize(podium_prob = mean(rank <= 3), 
+              bronze_prob = mean(rank == 3), 
+              silver_prob = mean(rank == 2), 
+              gold_prob = mean(rank == 1), 
+              rho = cor_vec[rrr])
   
   # prob that rank 1 in bould/lead makes podium
   BL_res_fin <- final %>%
     group_by(BL = e2 == 1 | e3 == 1) %>%
-    summarize(podium_prob = mean(rank <= 3)
-              , bronze_prob = mean(rank == 3)
-              , silver_prob = mean(rank == 2)
-              , gold_prob = mean(rank == 1)
-              , rho = cor_vec[rrr]
-              )
+    summarize(podium_prob = mean(rank <= 3), 
+              bronze_prob = mean(rank == 3), 
+              silver_prob = mean(rank == 2), 
+              gold_prob = mean(rank == 1), 
+              rho = cor_vec[rrr])
   
   # store results in lists
   speed_results_list_q[[rrr]] <- speed_res_qual
@@ -219,33 +215,33 @@ final_score %>%
   theme(panel.grid.major.x = element_blank())
 
 
+
 ### visualize speed results (probabilities of medalling in finals)
 speed_final_results <- speed_results_list_f %>%
-  do.call(rbind, .) %>%
-  mutate(event = "speed") %>%
+  bind_rows() %>%
+  mutate(event = "Speed") %>%
   filter(e1 == 1) %>%
   select(-e1)
 
 BL_final_results <- BL_results_list_f %>%
-  do.call(rbind, .) %>%
-  mutate(event = "bould/lead") %>%
+  bind_rows() %>%
+  mutate(event = "Bouldering/Lead") %>%
   filter(BL == TRUE) %>%
   select(-BL)
 
-podium_probs <- rbind(speed_final_results, BL_final_results) %>%
+podium_probs <- bind_rows(speed_final_results, BL_final_results) %>%
   pivot_longer(podium_prob:gold_prob, names_to = "Medal") %>%
-  mutate(Medal = ifelse(Medal == "gold_prob", "Gold", Medal)
-         , Medal = ifelse(Medal == "silver_prob", "Silver", Medal)
-         , Medal = ifelse(Medal == "bronze_prob", "Bronze", Medal)
-         , Medal = ifelse(Medal == "podium_prob", "Any", Medal)
-         )
+  mutate(Medal = ifelse(Medal == "gold_prob", "Gold", Medal), 
+         Medal = ifelse(Medal == "silver_prob", "Silver", Medal), 
+         Medal = ifelse(Medal == "bronze_prob", "Bronze", Medal), 
+         Medal = ifelse(Medal == "podium_prob", "Any", Medal))
 
 podium_probs %>%
   filter(Medal %in% c("Gold", "Any")) %>%
   ggplot(aes(rho, value)) +
   geom_path(aes(color = Medal)) +
   geom_point(aes(color = Medal)) +
-  facet_wrap(~event) +
+  facet_wrap(~ event, scales = "free") +
   xlab("Spearman Correlation") +
   ylab("Medal Probability") +
   scale_color_manual(values = c("midnightblue", "darkgoldenrod1")) +
