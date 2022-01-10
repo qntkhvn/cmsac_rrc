@@ -153,7 +153,7 @@ After obtaining the simulation output, we summarized the advancement probabiliti
 ```{r corr, fig.cap="The probabilities of winning qualification and final rounds, given that a climber finishes first in speed versus finishes first in bouldering or lead, obtained from simulation for each Spearman correlation value.", fig.height=3.3, fig.width=5.2}
 library(tidyverse)
 theme_set(theme_minimal())
-sim_results <- read_csv("sim_results.csv")
+sim_results <- read_csv("sim_results.zip")
 
 sim_results %>% 
   group_by(rho, round) %>% 
