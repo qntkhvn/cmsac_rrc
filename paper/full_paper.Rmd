@@ -1,5 +1,6 @@
 ---
 title: An Examination of Sport Climbing Competition Format and Scoring System
+  shorttitle: An Examination of Sport Climbing
 output: 
   pdf_document: 
     number_sections: yes
