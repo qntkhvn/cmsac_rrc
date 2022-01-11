@@ -23,7 +23,7 @@ header-includes:
  \usepackage[skip=4pt]{caption}
  \captionsetup[figure]{font=normalsize}
  \captionsetup[table]{font=normalsize}
- \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rank-product scoring, sports statistics}
+ \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rank-product scoring, sports statistics, social choice theory}
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
