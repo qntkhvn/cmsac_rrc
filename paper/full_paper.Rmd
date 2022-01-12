@@ -25,7 +25,6 @@ header-includes:
  \captionsetup[figure]{font=normalsize}
  \captionsetup[table]{font=normalsize}
  \providecommand{\keywords}[1]{\small \textit{{Keywords}}\text{:} sport climbing, rank-product scoring, sports statistics}
- \hypersetup{pdfborder = {1 1 1}}
 bibliography: ref.bib
 csl: ref_style.csl
 indent: true
