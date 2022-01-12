@@ -1,0 +1,405 @@
+---
+title: "How Removing a Ranked Climber Changes the Winners"
+author: "Hannah Butler"
+date: "7/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+
+# load data
+load("medal_displacement_probabilities.rdata")
+load("top3_displace_probs.rdata")
+load("medal_displacement_probabilities.rdata")
+
+##### functions #####
+assign_ranks <- function(c = 8) {
+  # randomly assign ranks in 3 events & compute total
+  # ranking in an event is considered to be independent from ranking in another event
+  output <- data.frame(climber = sample(LETTERS, c, replace = FALSE)
+                       , speed = sample(1:c, c, replace = FALSE)
+                       , bould = sample(1:c, c, replace = FALSE)
+                       , lead = sample(1:c, c, replace = FALSE)
+                       ) %>%
+    mutate(total = speed*bould*lead) %>%
+    arrange(total) %>% # some questionable tie-breaking code
+    mutate(m_rank_speed = ifelse(total %in% total[1:3] , rank(speed[1:3]), 0)
+           , m_rank_bould = ifelse(total %in% total[1:3] , rank(bould[1:3]), 0)
+           , m_rank_lead = ifelse(total %in% total[1:3] , rank(lead[1:3]), 0)
+           , tiebreaker = m_rank_speed + m_rank_bould + m_rank_lead
+           ) %>%
+    arrange(total
+            , tiebreaker
+            )
+  
+  return(output)
+}
+
+drop_climber <- function(results, r = 4) {
+  # drop a competitor and recompute rankings and totals
+  # r = which rank competitor to drop
+  ud_results <- results[-r, ] %>%
+    mutate(speed = rank(speed)
+           , bould = rank(bould)
+           , lead = rank(lead)
+           , total = speed*bould*lead
+           ) %>%
+    arrange(total)%>%
+    mutate(m_rank_speed = ifelse(total %in% total[1:3], rank(speed[1:3]), 0)
+           , m_rank_bould = ifelse(total %in% total[1:3], rank(bould[1:3]), 0)
+           , m_rank_lead = ifelse(total %in% total[1:3], rank(lead[1:3]), 0)
+           , tiebreaker = m_rank_speed + m_rank_bould + m_rank_lead
+           ) %>%
+    arrange(total
+            , tiebreaker
+            )
+  return(ud_results)
+}
+
+displace_medalist <- function(nsim = 1000, drop_rank = 4, nc = 8) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(c = nc))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st-3rd place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        sum(rank_perms[[x]]$climber[1:3] != dropout_ranks[[x]]$climber[1:3]) > 0
+                      }
+                      ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+
+displace_climber <- function(nsim = 1000, drop_rank = 4, nc = 8) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(c = nc))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st - (r-1)th place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        sum(rank_perms[[x]]$climber[1:(drop_rank - 1)] != dropout_ranks[[x]]$climber[1:(drop_rank - 1)]) > 0
+                      }
+                      ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+```
+
+# Intro
+A scoring system that multiplies the ranks across events is interesting because it does not possess the property that it is invariant to reordering when a competitor is removed. Examples of this can be found in existing combined climbing event data, where when a climber with a total rank of $r > 1$, higher ranks change order. This has to do with the Independence of Irrelevant Alternatives (IIA) in Voting Systems, which will be discussed later.
+
+We can test this in simulation to see how often we would expect there to be a reordering in competitors when a competitor of a lower rank is removed. In particular, we can estimate the probability that the set of finalists will change if a non-finalist is removed from the rankings, and we can estimate the probability of medalists being displaced if a non-medalist is removed. 
+
+## Independence of Irrelevant Alternatives
+
+# Methodology
+
+As it is the relevant upcoming event, we will focus the parameters of the simulation on those of sport climbing 2020 Tokyo Olympics (taking place in August, 2021). Namely, the qualifying round will consist of 40 individuals (20 men, 20 women) and the finals will consist of the 12(16?) (6(8?) men, 6(8?) women) climbers with the highest ranking in the qualifying round. For our simulations, we will naively assume that the ranks in all three events are assigned randomly and independently. (see the section on rank-product statistic which tests this assumption).
+
+
+# Results
+
+## Probability of Reordering in Higher Ranks
+We first look at the rate at which the ranks above that of which is dropped are reordered.
+```{r, echo = FALSE}
+load("reorder_all_above_probs.rdata")
+
+sum_dat1 <- reorder_all_above %>%
+  group_by(dropped_rank) %>%
+  rename("Dropped Rank" = dropped_rank) %>%
+  summarize("Simulations" = n()
+            , "Avg. Probability" = mean(displ_prob)
+            , "Median Probability" = median(displ_prob)
+            , "St. Deviation" = sd(displ_prob)
+            )
+
+knitr::kable(sum_dat1)
+```
+
+## Probability of Change in Finalists
+
+A potential event of interest is the replacement of one finalist with another, taking the chance away from the original finalist to win a medal in the finals round. Here we compute the probability that a finalist will be replaced with a non-finalist after removing another non-finalist from the rankings. Below is a table summarizing the results.
+
+```{r, echo=FALSE}
+load("drop_qualifier_sims.rdata")
+
+reorder_dat2 <- lapply(9:20
+                  , function(x) {
+                    data.frame(dropped_rank = x
+                               , displ_prob = pct_displace_finalists[[x-8]]
+                               )
+                    }
+                  ) %>%
+  do.call(rbind, .)
+
+sum_dat2 <- reorder_dat2 %>%
+  group_by(dropped_rank) %>%
+  rename("Dropped Rank" = dropped_rank) %>%
+  summarize("Simulations" = n()
+            , "Avg. Probability" = mean(displ_prob)
+            , "Median Probability" = median(displ_prob)
+            , "St. Deviation" = sd(displ_prob)
+            )
+
+knitr::kable(sum_dat2)
+  
+```
+
+as can be seen, the probability is relatively low when the 9th place competitor is removed. My hypothesis is that there is enough separation between the original finalists and the 10th+ ranking competitors in the individual events that there isn't a high chance that the total rankings of the finalists can be overtaken by 10+th place competitors. Note: it might be worth computing the probability of getting a low ranking in any of the individual events, given that a competitor is a finalist (ie: $P(r_1 > 8 \text{ or } r_2 > 8 \text{ or } r_3 > 8 \text{ }|\text{ } R_T \leq 8)$).
+
+
+## UPDATE
+Olympic Finalist Bassa Mawem pulled out of the sport climbing finals due to an injury in his left arm. Reuters reported that Megos, originally 9th in the total qualification rankings would not be replacing him. We suspect that this might be part of the unclear format of the Olympic Sport Climbing format. However, according to the climber's rankings, Megos technically should not have been next in line to fill in the missing finalist spot. Upon removing B. Mawem from the list and reranking the remaining competitors, we find that Chon would have moved into 8th place with a 640 combined score and Megos would have remained in 9th with 648. B. Mawem originally ranked first in the speed climbing, and Megos did comparatively poorly with 19th place. Both performed better than Mawem in bouldering and lead, leaving those rankings unchanged.
+
+Prior, we considered a change in finalists if a non-finalist was removed. It is clear now though that the more interesting scenario is would would replace an original finalist who is removed from the rankings. Should it be the original 9th place competitor, or does it make more sense with such a scoring system to rerank? Surely Chon should be rewarded for his superior performance in speed compared to Megos with the chance to win a medal?
+
+The next set of simulations will evaluate the probability that a removed finalist is replaced with someone other than the original 9th place competitor.
+
+```{r, eval = FALSE, include = FALSE}
+displace_finalist <- function(nsim = 100, drop_rank = 9) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(c = 20))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st-3rd place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        rank_perms[[x]]$climber[9] %in% dropout_ranks[[x]]$climber[1:8]
+                      }
+  ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+
+pct_displace_finalists <- lapply(1:8, function(x) replicate(100, displace_finalist(drop_rank = x)))
+
+nineth_to_finals <- lapply(1:8
+                  , function(x) {
+                    data.frame(dropped_rank = x, nineth_to_fin = pct_displace_finalists[[x]])
+                    }
+                  ) %>%
+  do.call(rbind, .)
+
+#save(nineth_to_finals, file = "nineth_to_finals.rdata")
+```
+
+```{r, echo = FALSE}
+load("nineth_to_finals.rdata")
+
+nineth_to_finals %>%
+  ggplot(aes(x = dropped_rank, y = nineth_to_fin)) +
+  geom_boxplot(aes(group = dropped_rank, fill = dropped_rank, col = -dropped_rank)) +
+  theme_minimal() +
+  xlab("Dropped Finalist Rank") +
+  ylab("Probability that 9th Place Moves to Finals") +
+  theme(legend.position = "None")
+
+nineth_to_finals %>% group_by(dropped_rank) %>% summarize(av_9th_to_fin = mean(nineth_to_fin), med_9th_to_fin = median(nineth_to_fin)) %>% knitr::kable()
+```
+
+How likely is it that 9th will move to finals if someone who won first in any event drops out.
+
+## Probability that Medalists are Reordered or Changed
+
+The second scenario of interest is if a medalist is displaced by another medalist, or even a non-medalist. Below are the results summarizing the probability of this scenario occurring under uniform random ranking conditions.
+
+```{r, echo = FALSE}
+# probability that medalists are displaced (changed or reordered)
+
+displace_probs %>%
+  group_by(dropped_rank) %>%
+  rename("Dropped Rank" = dropped_rank) %>%
+  summarize("Simulations" = n()
+            , "Avg. Probability" = mean(displ_prob)
+            , "Median Probability" = median(displ_prob)
+            , "St. Deviation" = sd(displ_prob)
+            ) %>%
+  knitr::kable()
+
+```
+
+
+# prob of displacing medalists as list of competitors grows
+```{r, eval=FALSE, include=FALSE}
+set.seed(80085)
+remove_c4 <- lapply(5:20, function(x) replicate(100, displace_climber(nsim = 100, drop_rank = 4, nc = x)))
+
+remove_c4_df <- lapply(5:20
+                  , function(x) {
+                    data.frame(n_climbers = x
+                               , dropped_rank = 4
+                               , displ_prob = remove_c4[[x-4]]
+                               )
+                    }
+                  ) %>%
+  do.call(rbind, .)
+#save(remove_c4_df, "R/remove_c4_sims.rdata")
+
+remove_c5 <- lapply(5:20, function(x) replicate(100, displace_medalist(nsim = 100, drop_rank = 5, nc = x)))
+
+remove_c5_df <- lapply(5:20
+                  , function(x) {
+                    data.frame(n_climbers = x
+                               , dropped_rank = 5
+                               , displ_prob = remove_c5[[x-4]]
+                               )
+                    }
+                  ) %>%
+  do.call(rbind, .)
+#save(remove_c5_df, file = "R/remove_c5_sims.rdata")
+
+remove_c6 <- lapply(6:20, function(x) replicate(100, displace_medalist(nsim = 100, drop_rank = 6, nc = x)))
+remove_c6_df <- lapply(6:20
+                  , function(x) {
+                    data.frame(n_climbers = x
+                               , dropped_rank = 6
+                               , displ_prob = remove_c6[[x-5]]
+                               )
+                    }
+                  ) %>%
+  do.call(rbind, .)
+```
+
+### Removing 4th Place
+```{r, include=FALSE}
+load("remove_c4_sims.rdata")
+remove_c4_df %>%
+  ggplot(aes(x = n_climbers, y = displ_prob)) +
+  geom_boxplot(aes(group = n_climbers)) +
+  theme_minimal() +
+  ylab("Probability of Displacing Top 3") +
+  xlab("Number of Original Climbers")
+```
+
+```{r, echo = FALSE}
+load("remove_c5_sims.rdata")
+load("remove_c6_sims.rdata")
+remove_c456 <- rbind(remove_c4_df, remove_c5_df, remove_c6_df)
+remove_c456 %>%
+  group_by(n_climbers, dropped_rank) %>%
+  summarize(av_disp_prob = mean(displ_prob)) %>%
+  ggplot(aes(x = n_climbers, y = av_disp_prob)) +
+  geom_line(aes(color = as.factor(dropped_rank))) +
+  theme_minimal()
+```
+
+# Questions: 
+- How often do we see a flip (two consecutive climbers switch places), jump (a climber jumps up more than one rank), drop (a climber drops down more than one rank)
+- how do the simulations compare to doing the same with actual data?
+
+# Appendix: R Functions
+
+**Randomly generate ranks for 3 events**
+```{r, eval=FALSE}
+assign_ranks <- function(c = 8) {
+  # randomly assign ranks in 3 events & compute total
+  # ranking in an event is considered to be independent from ranking in another event
+  output <- data.frame(climber = sample(LETTERS, c, replace = FALSE)
+                       , speed = sample(1:c, c, replace = FALSE)
+                       , bould = sample(1:c, c, replace = FALSE)
+                       , lead = sample(1:c, c, replace = FALSE)
+                       ) %>%
+    mutate(total = speed*bould*lead) %>%
+    arrange(total) %>% # some questionable tie-breaking code
+    mutate(m_rank_speed = ifelse(total %in% total[1:3] , rank(speed[1:3]), 0)
+           , m_rank_bould = ifelse(total %in% total[1:3] , rank(bould[1:3]), 0)
+           , m_rank_lead = ifelse(total %in% total[1:3] , rank(lead[1:3]), 0)
+           , tiebreaker = m_rank_speed + m_rank_bould + m_rank_lead
+           ) %>%
+    arrange(total
+            , tiebreaker
+            )
+  
+  return(output)
+}
+```
+
+**Remove a climber from simulated data and rerank remaining**
+```{r, eval=FALSE}
+drop_climber <- function(results, r = 4) {
+  # drop a competitor and recompute rankings and totals
+  # r = which rank competitor to drop
+  ud_results <- results[-r, ] %>%
+    mutate(speed = rank(speed)
+           , bould = rank(bould)
+           , lead = rank(lead)
+           , total = speed*bould*lead
+           ) %>%
+    arrange(total)%>%
+    mutate(m_rank_speed = ifelse(total %in% total[1:3], rank(speed[1:3]), 0)
+           , m_rank_bould = ifelse(total %in% total[1:3], rank(bould[1:3]), 0)
+           , m_rank_lead = ifelse(total %in% total[1:3], rank(lead[1:3]), 0)
+           , tiebreaker = m_rank_speed + m_rank_bould + m_rank_lead
+           ) %>%
+    arrange(total
+            , tiebreaker
+            )
+  return(ud_results)
+}
+```
+
+**Simulate reranking of all climbers above dropped climber**
+```{r, eval=FALSE}
+displace_climber <- function(nsim = 1000, drop_rank = 4, nc = 8) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(c = nc))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st - (r-1)th place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        sum(rank_perms[[x]]$climber[1:(drop_rank - 1)] != dropout_ranks[[x]]$climber[1:(drop_rank - 1)]) > 0
+                      }
+                      ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+```
+
+**Simulate reranking of medalists when a non-medalist is dropped**
+```{r, eval=FALSE}
+displace_medalist <- function(nsim = 1000, drop_rank = 4, nc = 8) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(nc))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st-3rd place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        sum(rank_perms[[x]]$climber[1:3] != dropout_ranks[[x]]$climber[1:3]) > 0
+                      }
+                      ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+```
+
+**Simulate replacement of finalists when a non-finalist is dropped** 
+*permutations do not count*
+```{r, eval=FALSE}
+displace_finalist <- function(nsim = 100, drop_rank = 9) {
+  # simulate nsim rankings
+  rank_perms <- lapply(1:nsim, function(x) assign_ranks(c = 20))
+  # drop ith competitor and recalculate ranks
+  dropout_ranks <- lapply(rank_perms, function(x) drop_climber(x, r = drop_rank))
+  # compare 1st-3rd place & calculate % not matched
+  pct_displ <- sapply(1:nsim, 
+                      function(x) {
+                        sum(rank_perms[[x]]$climber[1:8] %in% dropout_ranks[[x]]$climber[1:8]) < 8
+                      }
+  ) %>%
+    sum()/nsim
+  
+  return(pct_displ)
+}
+```
