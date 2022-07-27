@@ -1,0 +1,167 @@
+---
+title: "Climbing Sim"
+output: rmdformats::robobook 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      fig.width = 6,
+                      fig.height = 7)
+```
+
+
+```{r}
+library(tidyverse)
+theme_set(theme_light())
+```
+
+# Qualification
+
+Note: 20 athletes participate in qualification. 8 advance to final round.
+
+Let's try 10000 sims for now.
+
+```{r}
+set.seed(1)
+nsim <- 10000
+qual_sim <- list()
+for (i in 1:nsim) {
+  qual_sim[[i]] <-
+    bind_cols(
+      player = 1:20,
+      e1 = sample(1:20, replace = FALSE),
+      e2 = sample(1:20, replace = FALSE),
+      e3 = sample(1:20, replace = FALSE)
+    ) %>%
+    mutate(sim = i)
+}
+
+qual <- bind_rows(qual_sim) # tidyverse's do.call-rbind version
+
+qual <- qual %>% 
+  mutate(qual_score = e1 * e2 * e3) %>% 
+  group_by(sim) %>% 
+  arrange(qual_score, .by_group = TRUE) %>% 
+  mutate(qual_rank = row_number()) 
+```
+
+## If you win the first event, what is the probability that you advance?
+
+```{r}
+qual %>% 
+  filter(e1 == 1 & qual_rank <= 8) %>% 
+  ungroup() %>% 
+  summarize(nrow(.)/nsim)
+```
+
+## If you win ANY event, what is the probability you advance?  
+
+```{r}
+qual %>% 
+  filter((e1 == 1 | e2 == 1 | e3 == 1) & qual_rank <= 8) %>% 
+  nrow()
+```
+
+## If you finish last in the first event, what is the probability of advancing? 
+
+```{r}
+qual %>% 
+  filter(e1 == 20 & qual_rank <= 8) %>% 
+  nrow()
+```
+
+## If you finish last in ANY event, what is the probability you advance? 
+
+```{r}
+qual %>% 
+  filter((e1 == 20 | e2 == 20 | e3 == 20) & qual_rank <= 8) %>% 
+  nrow()
+```
+
+## What is the score that guarantees that you advance / do not advance? 
+
+
+## What is the average score of someone who advances? 
+
+```{r}
+qual %>% 
+  filter(qual_rank <= 8) %>% 
+  ungroup() %>% 
+  group_by(qual_rank) %>% 
+  summarize(avg_adv_score = mean(qual_score))
+```
+
+```{r}
+qual %>% 
+  filter(qual_rank <= 8) %>% 
+  ungroup() %>% 
+  summarize(avg_adv_score_overall = mean(qual_score))
+```
+
+
+## What is/are the distribution on the the first/second/etc. place qualifier? 
+
+```{r}
+qual %>% 
+  ggplot(aes(x = factor(qual_rank), y = qual_score)) +
+  geom_dotplot(binaxis = "y", binwidth = 1) + 
+  coord_flip()
+```
+
+```{r}
+library(ggridges)
+qual %>% 
+  ggplot(aes(x = qual_score, y = factor(qual_rank))) +
+  geom_density_ridges()
+```
+
+# Final Round
+
+```{r}
+set.seed(1)
+nsim <- 10000
+final_sim <- list()
+for (i in 1:nsim) {
+  final_sim[[i]] <-
+    bind_cols(
+      player = 1:8,
+      e1 = sample(1:8, replace = FALSE),
+      e2 = sample(1:8, replace = FALSE),
+      e3 = sample(1:8, replace = FALSE)
+    ) %>%
+    mutate(sim = i)
+}
+
+final <- bind_rows(final_sim) 
+
+final <- final %>% 
+  mutate(final_score = e1 * e2 * e3) %>% 
+  group_by(sim) %>% 
+  arrange(final_score, .by_group = TRUE) %>% 
+  mutate(final_rank = row_number()) 
+```
+
+## If you win any event, what is the probability that you win a medal?
+
+```{r}
+final %>% 
+  filter((e1 == 1 | e2 == 1 | e3 == 1) & final_rank <= 3) %>% 
+  nrow()
+```
+
+## If you win the first event, what is the probability you win a medal?
+
+```{r}
+final %>% 
+  filter(e1 == 1 & final_rank <= 3) %>% 
+  nrow()
+```
+
+## What is the distribution of the winners score if ranks are random? 
+
+```{r}
+final %>% 
+  filter(final_rank == 1) %>% 
+  ggplot(aes(final_score)) + 
+  geom_histogram(bins = 21, color = "white")
+```
