@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{natbib}      % cross referencing bibliography entries
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{graphicx}    % importing graphics into figures
+\usepackage{multirow}    % tables with multiple rows
+\usepackage{slashbox}    % tables with slash
+\usepackage{rotating}    % for vertical words in table
+\usepackage{color}       % for textcolor.. (temporary use before submission)
+\usepackage{bm}
+\usepackage[section]{placeins} % ensure floats do not go into the next section.
+
+
+\begin{document}
+\section{Introduction}
+The 2020 Summer Olympics (held in 2021) will feature the debut of five new sports (https://olympics.com/ioc/news/ioc-approves-five-new-sports-for-olympic-games-tokyo-2020): surfing, skateboarding, karate, baseball/softball (not really new, but absent since 2008) and sport climbing.  Sport climbing is particularly interesting as the International Olympic Committee (IOC) awarded only two sets of medals for the sport, one for men's and one for women's.  
+
+What makes this particularly interesting is that, sport climbing has several distinct disciplines: Speed climbing, bouldering, and lead climbing.  Speed climbing takes place on a standardized course and competitors try to reach the top of the course as fast as possible.  In the Olympics, speed climbing is being contested in a head-to-head format with ranks determined by how far a competitor advances in the bracket.   In bouldering, contestants have a fixed amount of time to complete as many courses as they can.  Winners are determined based on who completes the most courses and ties are broken based on who had the fewest attempts.  Ties are further broken by the competitor achieved the most ``zone holds", which are holds approximately half way through each course.  Finally, in lead climbing a competitor gets one point for each hold that they reach, so whoever reaches the highest point on the wall is the winner.  In lead climbing, each competitor only gets one attempt and when they fall their attempt is over.  %(https://www.cnet.com/news/climbing-at-the-tokyo-olympics-everything-you-need-to-know/)
+
+These three different events demand different sets of skills and, often, athletes specialize in a single event.  However, since only one set of Olympic medals was awarded to climbing, rather than choosing only one of these disciplines to include in the Olympics, all three events were chosen to be included as a sort of climbing triathlon.  
+
+In order to declare a winner, a rather unique scoring system has been put in to place, with the full details to come, that rewards high finishes in each of the individual events and relatively ignores very poor finishes.  This article examines this unique scoring system. 
+
+The rest of this article is organized as follows: 
+
+FILL IN 
+
+\section{Scoring Method}
+In the Olympic sport climbing, there are 20 competitors at the start (in both men's and women's).  All 20 competitors compete in each of the three events in the qualification round, and their performances in each event are ranked from 1 to 20.  A competitors final score is then computed as the product of their ranks in the three events and the lower product is better.  Specifically, 
+
+$$
+Score_i = R^S_i\times R^B_i\times R^L_i
+$$, 
+
+where $R^S_i$, $R^B_i$, and $R^L_i$ are the ranks of the $i$-th competitor in speed, bouldering, and lead, respectively.  
+
+The top 8 (I think it's 8) finishers in the qualification round advance to the finals where the 8 remaining climbers again compete in all three events, they are again ranked from 1 to 8, and their final score is the product of these three ranks in the final.  Whoever has the lowest product of ranks in the final wins the gold medal.  
+
+This type of scoring system heavily rewards high finishes and relatively ignores poor finishes.  For instance, if climber A finished 1st, 20th, and 20th and climber B finished 10th, 10th, and 10th, climber B would have a score of 1000 whereas climber A would have a much better score of 400, despie finishing last in 2 out of 3 of the events.  
+
+\section{Other scoring methods}
+
+
+\section{Rank Product}
+https://www.sciencedirect.com/science/article/pii/S0014579304009354
+
+
+Youth Olympics Qualification video: %https://www.youtube.com/watch?v=3w8kCI5GCUQ&ab_channel=Olympics
+
+
+%https://www.ifsc-climbing.org/images/media-centre/2017/2017_IFSC_Plenary_Assembly_Quebec_City_Olympic_Format.pdf
+
+
+%https://www.climbing.com/competition/olympics/a-guide-to-the-olympic-climbing-format/
+
+
+Soccer points: %https://journals.sagepub.com/doi/10.1177/1527002507301116
+
+Cross country scoring: %https://link.springer.com/content/pdf/10.1007/s11127-007-9193-6.pdf\cite{Hammond2007}
+
+https://link.springer.com/article/10.1007/s11127-017-0494-0\cite{BoudreauEtAl2018}
+
+Decathlon scoring: %https://research.ou.nl/en/publications/decathlon-towards-a-balanced-and-sustainable-performance-assessme\cit{Westera2006}
+
+Rock Climbing scoring.  
+
+\section{Data}
+
+World Championship 2018, men's and women's
+
+Asian Games 2018
+
+\section{Results}
+
+\subsection{Simulations}
+\subsubsection{Uniform ranks}
+
+- Distributions of points for qualifying and finals given uniform rankings. 
+
+- Conditional probabilities.  
+
+\subsubsection{Leave one out analysis} 
+
+- For n finalists, how often is the ranking preserved when a single climber is removed.
+
+- Independence of Irrelevant groups.  (IIG)
+
+
+\subsection{Data Analysis} 
+\subsubsection{Leave one out analysis} 
+
+- How would do the ranks changes when a single particpant is removed.  (i.e. What would happed if onyl 5 people made the finals instead of 6 and performance was the exact same?) (Independence of Irrelevant Alternatives.  (IIA))
+
+- Examples where you remove the fifth ranked climber from the competition and the medals changed. 
+
+\subsubsection{Correlations}
+
+- So bouldering and lead as highly correlated with each other. 
+
+- As a result bouldering and lead are more highly correlated with overall standings.  
+
+- Speed climbers are going to suffer under this format.  
+
+- Speed climbers are getting screwed!
+
+\subsubsection{Rank Product statistic}
+
+- What does Hannah have?
+
+Is there manipulability???!?!?!?
+
+% outline of paper: 
+% Simulation stuff.  
+% Distribution of scores under random ranking. 
+% Probability of advancement condtional on winnin/losing first event given random ranks.  
+% 
+% How different is the rank vs the product.  
+% Borda count
+% Voting properties?  
+
+\section{Proposed better scoring method}
+
+- Rank sum
+
+- Weighted ranks (sum or product)
+
+\section{Conclusion}
+
+- Speed climbers are getting screwed.  
+
+- There is a great dependence on irrelevent party. 
+
+
+\bibliography{rockclimbing}
+\bibliographystyle{chicago}
+
+\end{document}
