@@ -1,1 +1,1 @@
-## `cmsac_rrc`: Repository for Carnegie Mellon Sports Analytics Conference Reproducible Research Competition
+CMSAC Reproducible Research Competition Submissions
